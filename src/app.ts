@@ -23,6 +23,11 @@ const startServer = async()=>{
 
 startServer();
 
+app.get('/',(req,res)=>{
+    res.status(200).json({message:'welcome!'});
+});
+
+
 app.listen(3000,()=>{
     console.log('Server running on http://localhost:3000');
 });
