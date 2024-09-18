@@ -14,9 +14,9 @@ export async function userValidator(req):Promise<User>{
             if(!verifyToken){
                 throw new Error("Token expired!");
             }
-            const {phone} = jwt.decode(authHeader) as any;
+            const {email} = jwt.decode(authHeader) as any;
 
-            const user = await prisma.user.findUnique({where:{phone}});
+            const user = await prisma.user.findUnique({where:{email}});
             if(!user){
                 throw new Error("User Not Found!");
             }
