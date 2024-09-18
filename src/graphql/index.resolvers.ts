@@ -8,7 +8,10 @@ import {saleResolver,saleQuery} from './resolvers/sale.resolver';
 import {query} from './queries/query'
 import { mutation } from './mutations/mutation';
 import {enumTypes} from './types/enum/enum.type';
-import {submitBuyerInput,submitRentInput,submitSaleInput} from './types/input/input.type';
+import { filterSaleInput,
+     submitBuyerInput,
+     submitRentInput,
+     submitSaleInput } from './types/input/input.type';
 
 export const typeDefs = `#graphql
     # enum
@@ -17,6 +20,7 @@ export const typeDefs = `#graphql
     ${submitBuyerInput}
     ${submitRentInput}
     ${submitSaleInput}
+    ${filterSaleInput}
     # main 
     ${sale}
     ${buyer}
