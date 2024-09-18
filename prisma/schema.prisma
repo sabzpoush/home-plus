@@ -25,9 +25,11 @@ enum PropertyType {
 
 model User {
   id           String   @id @unique @default(uuid())
-  name         String
-  title        String
-  phone        String   @unique
+  email        String?  @unique
+  password     String?
+  name         String?
+  title        String?
+  phone        String?  @unique
   registerDate DateTime @default(now())
   token        String
   Sale         Sale[]
@@ -56,6 +58,7 @@ model Sale {
   submitedAt DateTime     @default(now())
   userId     String
   type       PropertyType
+  watchCount Int @default(0)
 }
 
 model Buyer {
@@ -63,8 +66,8 @@ model Buyer {
   user          User           @relation(fields: [userId], references: [id])
   title         String
   price         Int?
-  mortgage   Int?
-  rent       Int?
+  mortgage      Int?
+  rent          Int?
   sellerName    String?
   phone         String
   detail        String?
@@ -78,6 +81,7 @@ model Buyer {
   userId        String
   type          PropertyType   @default(Buyer)
   property      PropertyType[]
+  watchCount Int @default(0)
 }
 
 model Rent {
@@ -101,4 +105,5 @@ model Rent {
   submitedAt DateTime     @default(now())
   userId     String
   type       PropertyType @default(Rent)
+  watchCount Int @default(0)
 }
