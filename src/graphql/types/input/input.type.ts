@@ -65,3 +65,16 @@ export const submitBuyerInput = `#graphql
         type:BuyerType
     }
 `;
+
+export const filterSaleInput = `#graphql
+    input FilterSaleInput{
+        priceFrom:Int
+        priceTo:Int
+        buildYearFrom:Int
+        buildYearTo:Int
+        meterageFrom:Int
+        meterageTo:Int
+        type:[PropertyType]
+        room:Int
+    }
+`; 
