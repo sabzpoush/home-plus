@@ -1,5 +1,5 @@
 import {PrismaClient, User,Rent} from '@prisma/client'
-import { userValidator } from 'src/utils/auth/auth.util';
+import { userValidator } from '../../utils/auth/auth.util';
 const prisma = new PrismaClient();
 
 export const rentResolver = {
