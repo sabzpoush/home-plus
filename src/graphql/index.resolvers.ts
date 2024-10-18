@@ -2,7 +2,7 @@ import {sale} from './types/sale.type';
 import {user,auth} from './types/user.type';
 import {rent} from './types/rent.type';
 import {buyer} from './types/buyer.type';
-import {userResolver} from './resolvers/user.resolver';
+import {userQueryResolver, userResolver} from './resolvers/user.resolver';
 import {rentResolver} from './resolvers/rent.resolver';
 import {saleResolver,saleQuery} from './resolvers/sale.resolver';
 import {query} from './queries/query'
@@ -12,6 +12,8 @@ import { filterSaleInput,
      submitBuyerInput,
      submitRentInput,
      submitSaleInput } from './types/input/input.type';
+import {submitedType} from './types/input/query.type';
+
 
 export const typeDefs = `#graphql
     # enum
@@ -28,6 +30,7 @@ export const typeDefs = `#graphql
     ${user}
     ${auth}
     # query
+    ${submitedType}
     ${query}
     # mutation
     ${mutation}
@@ -36,6 +39,7 @@ export const typeDefs = `#graphql
 export const resolvers = {
     Query:{
         ...saleQuery,
+        ...userQueryResolver
     },
     Mutation:{
         ...rentResolver,

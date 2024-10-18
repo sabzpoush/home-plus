@@ -13,6 +13,13 @@ export const buyerResolver = {
 
         return buyer;
     },
+    deleteBuyer:async(_,{id},context)=>{
+        const user:User = await userValidator(context.req);
+
+        const buyer = await prisma.buyer.delete({where:{id,userId:user.id}});
+        if(!buyer) throw new Error('حذف ملک با خطا مواجه شد!');
+        return `آگهی خرید ${buyer.title} با موفقیت حذف شد!`;
+    }
 };
 
 export const buyerQuery = {

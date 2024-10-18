@@ -1,7 +1,9 @@
-import {PrismaClient} from '@prisma/client'
+import {PrismaClient, User} from '@prisma/client'
 const prisma = new PrismaClient();
 import {createToken} from '../../utils/auth/token.util';
 import bcrypt from 'bcrypt';
+import { userValidator } from '../../utils/auth/auth.util';
+import { rent } from '../types/rent.type';
 
 export const userResolver = {
     login:async(_,args)=>{
@@ -10,11 +12,11 @@ export const userResolver = {
         if(!user){
             throw new Error('کاربری با این شماره تلفن یافت نشد!');
         }
-
-        return {token:user.token,user};
+        const token:string = createToken(user.email) as string;
+        const userWithNewToken = await prisma.user.update({where:{id:user.id},data:{token}});
+        return {token:token,user:userWithNewToken};
     },
     register:async(_,args)=>{
-        console.log(args);
         const {email}  = args;
         const token = createToken(email);
         const salt = bcrypt.genSaltSync(10);
@@ -27,8 +29,17 @@ export const userResolver = {
 
         return {token:user.token,user};
     },
-    test:(parent,args)=>{
-        console.log(args.value);
-        return{ value:String(args.value)};
+}
+
+export const userQueryResolver = {
+    userPropertySubmited:async(_,{},context)=>{
+        const user:User = await userValidator(context.req);
+
+        const sales = await prisma.sale.findMany({where:{userId:user.id}});
+        const rents = await prisma.rent.findMany({where:{userId:user.id}});
+        const buyers = await prisma.buyer.findMany({where:{userId:user.id}});
+        if(!sales || !rents || !buyers) throw new Error('بارگذاری اطلاعات شما با خطا مواجه شد!');
+
+        return {sales,rents,buyers};
     }
 }

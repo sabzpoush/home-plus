@@ -58,8 +58,14 @@ export const saleResolver = {
         }
 
         return sale;
-    }
+    },
+    deleteSale:async(_,{id},context)=>{
+        const user:User = await userValidator(context.req);
 
+        const sale = await prisma.sale.delete({where:{id,userId:user.id}});
+        if(!sale) throw new Error('حذف ملک با خطا مواجه شد!');
+        return `ملک ${sale.title} با موفقیت حذف شد!`;
+    }
 };
 
 export const saleQuery = {

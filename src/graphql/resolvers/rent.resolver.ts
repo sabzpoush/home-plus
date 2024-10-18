@@ -3,7 +3,7 @@ import { userValidator } from '../../utils/auth/auth.util';
 const prisma = new PrismaClient();
 
 export const rentResolver = {
-    submitSale:async(_,{rent},context)=>{
+    submitRent:async(_,{rent},context)=>{
         const user:User = await userValidator(context.req);
         const rents = await prisma.rent.create({data:{...rent,user:{connect:{id:user.id}}}});
         if(!rents){
@@ -11,6 +11,13 @@ export const rentResolver = {
         }
 
         return rents;
+    },
+    deleteRent:async(_,{id},context)=>{
+        const user:User = await userValidator(context.req);
+
+        const rent = await prisma.rent.delete({where:{id,userId:user.id}});
+        if(!rent) throw new Error('حذف ملک با خطا مواجه شد!');
+        return `آگهی رهن ${rent.title} با موفقیت حذف شد!`;
     }
 };
 
