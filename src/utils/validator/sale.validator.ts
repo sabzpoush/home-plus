@@ -5,11 +5,11 @@ export const rentSchema = joi.object({
         .required()
         .min(3)
         .max(25),
-    owner: joi.string()
+    sellerName: joi.string()
         .min(3)
         .max(30),
+
     mortagage: joi.number(),
-    rent:joi.number(),
     phone:joi.string()
         .required(),
     address: joi.string(),
