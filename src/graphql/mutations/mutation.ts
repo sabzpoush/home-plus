@@ -13,6 +13,8 @@ export const mutation = `#graphql
         ):[Sale]
 
         singleSale(id:ID!):Sale
+        singleRent(id:ID!):Rent
+        singleBuer(id:ID!):Buyer
 
         deleteSale(id:ID!):String
         deleteRent(id:ID!):String
