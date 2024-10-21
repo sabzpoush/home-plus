@@ -13,6 +13,16 @@ export const buyerResolver = {
 
         return buyer;
     },
+    singleSale:async(_,{id})=>{
+        const buyer = await prisma.buyer.findUnique({where:{id}});
+        if(!buyer){
+            throw new Error('آگهی فروش یافت نشد!');
+        }else{
+            await prisma.buyer.update({where:{id},data:{watchCount:{increment:1}}});
+        }
+
+        return buyer;
+    },
     deleteBuyer:async(_,{id},context)=>{
         const user:User = await userValidator(context.req);
 

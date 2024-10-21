@@ -18,7 +18,7 @@ import {submitedType} from './types/input/query.type';
 export const typeDefs = `#graphql
     # enum
     ${enumTypes}
-    #input 
+    # input 
     ${submitBuyerInput}
     ${submitRentInput}
     ${submitSaleInput}

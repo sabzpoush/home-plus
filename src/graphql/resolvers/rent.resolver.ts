@@ -12,6 +12,16 @@ export const rentResolver = {
 
         return rents;
     },
+    singleRent:async(_,{id})=>{
+        const rent = await prisma.rent.findUnique({where:{id}});
+        if(!rent){
+            throw new Error('آگهی فروش یافت نشد!');
+        }else{
+            await prisma.rent.update({where:{id},data:{watchCount:{increment:1}}});
+        }
+
+        return rent;
+    },
     deleteRent:async(_,{id},context)=>{
         const user:User = await userValidator(context.req);
 
