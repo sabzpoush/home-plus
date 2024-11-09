@@ -1,5 +1,6 @@
 import {PrismaClient, User,Rent} from '@prisma/client'
 import { userValidator } from '../../utils/auth/auth.util';
+import { saleResolver } from './sale.resolver';
 const prisma = new PrismaClient();
 
 export const rentResolver = {
@@ -11,6 +12,65 @@ export const rentResolver = {
         }
 
         return rents;
+    },    
+    editRent:async(_,{rentId: rentId,rent:args},context)=>{
+        const user:User = await userValidator(context.req);
+
+        const rent = await prisma.rent.update({
+            where:{id:rentId,userId:user.id},
+            data:{...args}
+        });
+
+        const updatedRent = await prisma.rent.findUnique({where:{id:rent.id}});
+        if(!updatedRent){
+            throw new Error(
+                "در بروزرسانی ملک مشکلی بوجود امد!"
+            );
+        }
+
+        return updatedRent;
+    },
+    filterRent:async(_,{filter},context)=>{
+        const {
+            room,
+            mortgageFrom = 0,
+            mortgageTo,
+            rentFrom = 0,
+            rentTo,
+            buildYearFrom = 0,
+            buildYearTo,
+            meterageFrom = 0,
+            meterageTo,
+            type=[
+                "Apartment",
+                "Pilot",
+                "Basement",
+                "Land",
+                "Resident",
+                "Buyer",
+                "Rent"
+            ],
+        } = filter;
+
+        const rent = await prisma.rent.findMany({
+            where:{
+                AND:[   
+                    {buildYear:{gte:buildYearFrom,...(buildYearTo !== undefined && {lte:buildYearTo})}},
+                    {meterage:{gte:meterageFrom,...(meterageTo !== undefined && {lte:meterageTo})}},     
+                    {...(mortgageFrom !== undefined && {mortgage:{gte:mortgageFrom}})},
+                    {...(mortgageTo !== undefined &&{mortgage:{lte:mortgageTo}})},
+                    {...(rentFrom !== undefined &&{rent:{gte:rentFrom}})},
+                    {...(rentTo !== undefined &&{rent:{lte:rentTo}})},
+                    {...(room !== undefined && { room:{lte:room}})},
+                    {type:{in:type}},
+                ]                                   
+ 
+            }
+        });
+
+        if(rent.length  == 0) throw new Error('ملکی مشابه نیاز های شما یافت نشد!');
+
+        return rent;
     },
     singleRent:async(_,{id})=>{
         const rent = await prisma.rent.findUnique({where:{id}});
@@ -33,7 +93,22 @@ export const rentResolver = {
 
 export const rentQuery = {
     allRent:async()=>{
-        return await prisma.rent.findMany();
+        const rents = await prisma.rent.findMany()
+        if(rents.length == 0) throw new Error("ملکی در سایت ثبت نشده است!");
+        return rents;
     },
+    topViewedRents:async()=>{
+        const rents = (await prisma.rent.findMany({})).sort((a,b)=>a.watchCount - b.watchCount);
+        if(rents.length == 0){
+            throw new Error('ملکی در سایت موجود نیست');
+        }
+
+        return rents;
+    },
+    newRents:async()=>{
+        const rents = (await prisma.rent.findMany());
+        if(rents.length == 0) throw new Error("ملکی در سایت ثبت نشده است!");
+        return rents;
+    }
 }
 

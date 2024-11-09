@@ -9,9 +9,10 @@ import {query} from './queries/query'
 import { mutation } from './mutations/mutation';
 import {enumTypes} from './types/enum/enum.type';
 import { filterSaleInput,
-     submitBuyerInput,
-     submitRentInput,
-     submitSaleInput } from './types/input/input.type';
+    submitBuyerInput,
+    submitRentInput,
+    submitSaleInput ,
+    editSale } from './types/input/input.type';
 import {submitedType} from './types/input/query.type';
 
 
@@ -23,6 +24,7 @@ export const typeDefs = `#graphql
     ${submitRentInput}
     ${submitSaleInput}
     ${filterSaleInput}
+    ${editSale}
     # main 
     ${sale}
     ${buyer}

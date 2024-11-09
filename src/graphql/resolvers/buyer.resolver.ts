@@ -13,7 +13,24 @@ export const buyerResolver = {
 
         return buyer;
     },
-    singleSale:async(_,{id})=>{
+    editBuyer:async(_,{buyerId,buyer:args},context)=>{
+        const user:User = await userValidator(context.req);
+
+        const buyer = await prisma.buyer.update({
+            where:{id:buyerId,userId:user.id},
+            data:{...args}
+        });
+
+        const updatedBuyer = await prisma.buyer.findUnique({where:{id:buyer.id}});
+        if(!updatedBuyer){
+            throw new Error(
+                "در بروزرسانی ملک مشکلی بوجود امد!"
+            );
+        }
+
+        return updatedBuyer;
+    },
+    singleBuyer:async(_,{id})=>{
         const buyer = await prisma.buyer.findUnique({where:{id}});
         if(!buyer){
             throw new Error('آگهی فروش یافت نشد!');
@@ -34,6 +51,8 @@ export const buyerResolver = {
 
 export const buyerQuery = {
     allBuyer:async()=>{
-        return await prisma.buyer.findMany();
+        const buyers = await prisma.buyer.findMany();
+        if(buyers.length == 0) throw new Error("آگهی خریدی فعلا نیست!");
+        return buyers;
     }
 };

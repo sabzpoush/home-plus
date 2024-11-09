@@ -38,6 +38,7 @@ export const userQueryResolver = {
         const sales = await prisma.sale.findMany({where:{userId:user.id}});
         const rents = await prisma.rent.findMany({where:{userId:user.id}});
         const buyers = await prisma.buyer.findMany({where:{userId:user.id}});
+        
         if(!sales || !rents || !buyers) throw new Error('بارگذاری اطلاعات شما با خطا مواجه شد!');
 
         return {sales,rents,buyers};
