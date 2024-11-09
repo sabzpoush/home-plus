@@ -39,7 +39,6 @@ export const submitRentInput = `#graphql
         tag:[String]
         type:RentType
     }
-
 `;
 
 export const submitBuyerInput = `#graphql
@@ -78,3 +77,67 @@ export const filterSaleInput = `#graphql
         room:Int
     }
 `; 
+
+export const editSale = `#graphql
+    input SaleEdit{
+        title:String
+        price:Int
+        sellerName:String
+        phone:String
+        address:String
+        detail:String
+        meterage:Int
+        room:Int
+        buildYear:Int
+        floor:Int
+        countFloor:Int
+        parking:Boolean
+        elvator:Boolean
+        warehouse:Boolean
+        tag:[String]
+    }
+`;
+
+export const editBuer = `#graphql
+    input BuyerEdit{
+        title:String
+        price:Int
+        sellerName:String
+        phone:String
+        address:String
+        detail:String
+        fromMeter:Int
+        toMeter:Int
+        room:Int
+        fromBuildYear:Int
+        toBuildYear:Int
+        floor:Int
+        countFloor:Int
+        parking:Boolean
+        elvator:Boolean
+        warehouse:Boolean
+        tag:[String]
+        property:[BuyerRequestType]
+    }
+`;
+
+export const editRent = `#graphql
+    input RentEdit{
+        title:String
+        owner:String
+        mortgage:Int
+        rent:Int
+        phone:String
+        address:String
+        detail:String
+        meterage:Int
+        room:Int
+        buildYear:Int
+        floor:Int
+        countFloor:Int
+        parking:Boolean
+        elvator:Boolean
+        warehouse:Boolean
+        tag:[String]
+    }
+`;
