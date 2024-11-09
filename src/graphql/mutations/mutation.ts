@@ -3,22 +3,9 @@ export const mutation = `#graphql
         register(email:String!,password:String!):Auth
         login(email:String!,password:String):Auth
     
-
         submitSale(
             sale:SaleInput
         ):Sale
-
-        filterSale(
-            filter:FilterSaleInput
-        ):[Sale]
-
-        singleSale(id:ID!):Sale
-        singleRent(id:ID!):Rent
-        singleBuer(id:ID!):Buyer
-
-        deleteSale(id:ID!):String
-        deleteRent(id:ID!):String
-        deleteBuyer(id:ID!):String
 
         submitRent(
             rent:RentInput
@@ -27,5 +14,37 @@ export const mutation = `#graphql
         submitBuyer(
             buyer:BuyerInput
         ):Buyer
+
+        editSale(
+            id:ID!
+            sale:SaleEdit
+        ):Sale
+
+        editRent(
+            id:ID!
+            rent:RentEdit
+        ):Rent
+
+        editBuyer(
+            id:ID!
+            buyer:BuyerEdit
+        ):Buyer
+
+        filterSale(
+            filter:FilterSaleInput
+        ):[Sale]
+
+        selfPropertyFilter(
+            filter:FilterSaleInput
+        ):[Sale]
+
+        singleSale(id:ID!):Sale
+        singleRent(id:ID!):Rent
+        singleBuyer(id:ID!):Buyer
+
+        deleteSale(id:ID!):String
+        deleteRent(id:ID!):String
+        deleteBuyer(id:ID!):String
+
     }
 `;
