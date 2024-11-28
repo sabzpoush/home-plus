@@ -7,27 +7,41 @@ import { rent } from '../types/rent.type';
 
 export const userResolver = {
     login:async(_,args)=>{
-        const {email} = args;
-        const user = await prisma.user.findUnique({where:{email}});
-        if(!user){
-            throw new Error('کاربری با این شماره تلفن یافت نشد!');
+        try{
+            const {email,password} = args;
+            const user = await prisma.user.findUnique({where:{email}});
+            if(!user){
+                throw new Error('کاربری با این شماره تلفن یافت نشد!');
+            }
+            const isValidPassword:boolean = bcrypt.compareSync(password,user.password);
+            if(!isValidPassword){
+                throw new Error('نام کاربری یا رمز عبور اشتباه است!')
+            }
+            return {token:user.token,user};
+        }catch(err){
+            throw new Error(`خطای ناشناخته! ${err}`);
         }
-        const token:string = createToken(user.email) as string;
-        const userWithNewToken = await prisma.user.update({where:{id:user.id},data:{token}});
-        return {token:token,user:userWithNewToken};
     },
     register:async(_,args)=>{
-        const {email}  = args;
-        const token = createToken(email);
-        const salt = bcrypt.genSaltSync(10);
-        const hashPassword = bcrypt.hashSync(args.password,salt);
-        const user = await prisma.user.create({data:{...args,password:hashPassword,token}});
-
-        if(!user){
-            throw new Error("در ثبت نام کاربر مشکلی بوجود آمد!");
+        try{
+            const {email}  = args;
+            const token = createToken(email);
+            const salt = bcrypt.genSaltSync(10);
+            const hashPassword = bcrypt.hashSync(args.password,salt);
+            const checkUser = await prisma.user.findUnique({where:{email}});
+            if(checkUser){
+                throw new Error('این ایمیل قبلا ثبت شده!');
+            }
+            const user = await prisma.user.create({data:{...args,password:hashPassword,token}});
+    
+            if(!user){
+                throw new Error("در ثبت نام کاربر مشکلی بوجود آمد!");
+            }
+    
+            return {token:user.token,user};
+        }catch(err){
+            throw new Error(`مشکلی ناشناخته بودجود امد! \n ${err}`,);
         }
-
-        return {token:user.token,user};
     },
 }
 
