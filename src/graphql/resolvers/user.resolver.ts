@@ -43,6 +43,16 @@ export const userResolver = {
             throw new Error(`مشکلی ناشناخته بودجود امد! \n ${err}`,);
         }
     },
+    editUser:async(_,args,context)=>{
+        const user:User = await userValidator(context.req);
+
+        const editProfile:User = await prisma.user.update({where:{id:user.id},data:{...args}});
+        if(!editProfile){
+            throw new Error('در ویرایش کاربر مشکلی رخ داد!');
+        }
+
+        return editProfile;
+    }
 }
 
 export const userQueryResolver = {

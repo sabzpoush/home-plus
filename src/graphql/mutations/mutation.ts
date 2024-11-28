@@ -2,6 +2,7 @@ export const mutation = `#graphql
     type Mutation{
         register(email:String!,password:String!):Auth
         login(email:String!,password:String):Auth
+        editUser(user:UserEdit):User
     
         submitSale(
             sale:SaleInput
@@ -33,6 +34,9 @@ export const mutation = `#graphql
         filterSale(
             filter:FilterSaleInput
         ):[Sale]
+        filterRent(
+            filter:FilterRentInput
+        ):[Rent]
 
         selfPropertyFilter(
             filter:FilterSaleInput

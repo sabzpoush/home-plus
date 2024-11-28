@@ -78,6 +78,21 @@ export const filterSaleInput = `#graphql
     }
 `; 
 
+export const filterRentInput = `#graphql
+    input FilterRentInput{
+        mortgageFrom:Int,
+        mortgageTo:Int,
+        rentFrom:Int,
+        rentTo:Int,
+        buildYearFrom:Int
+        buildYearTo:Int
+        meterageFrom:Int
+        meterageTo:Int
+        type:[PropertyType]
+        room:Int
+    }
+`; 
+
 export const editSale = `#graphql
     input SaleEdit{
         title:String
@@ -98,7 +113,7 @@ export const editSale = `#graphql
     }
 `;
 
-export const editBuer = `#graphql
+export const editBuyer = `#graphql
     input BuyerEdit{
         title:String
         price:Int
@@ -139,5 +154,18 @@ export const editRent = `#graphql
         elvator:Boolean
         warehouse:Boolean
         tag:[String]
+    }
+`;
+
+export const editUser = `#graphql
+    input UserEdit{
+        id: String!
+        email: String!
+        password: String
+        name: String
+        title: String
+        phone: String
+        registerDate: String!
+        token: String
     }
 `;

@@ -12,7 +12,7 @@ import { filterSaleInput,
     submitBuyerInput,
     submitRentInput,
     submitSaleInput ,
-    editSale } from './types/input/input.type';
+    editSale,editBuyer,editRent, editUser,filterRentInput } from './types/input/input.type';
 import {submitedType} from './types/input/query.type';
 
 
@@ -25,6 +25,10 @@ export const typeDefs = `#graphql
     ${submitSaleInput}
     ${filterSaleInput}
     ${editSale}
+    ${editBuyer}
+    ${editRent}
+    ${editUser}
+    ${filterRentInput}
     # main 
     ${sale}
     ${buyer}

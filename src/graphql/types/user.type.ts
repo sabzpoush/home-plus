@@ -7,6 +7,7 @@ export const user = `#graphql
         title:String!
         phone:String
         registerDate:String!
+        token:String
         Sale:[Sale]
         Buyer:[Buyer]
         Rent:[Rent]
