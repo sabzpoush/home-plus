@@ -27,6 +27,12 @@ app.get('/',(req,res)=>{
     res.status(200).json({message:'welcome!'});
 });
 
+app.get('/ip', (req, res) => {
+    // Get the client's IP address
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    res.send(`Your IP address is: ${ip}`);
+  });
+  
 
 app.listen(3000,()=>{
     console.log('Server running on http://localhost:3000');
