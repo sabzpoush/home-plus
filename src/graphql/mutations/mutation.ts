@@ -49,6 +49,13 @@ export const mutation = `#graphql
         deleteSale(id:ID!):String
         deleteRent(id:ID!):String
         deleteBuyer(id:ID!):String
+        
+        uploadFile(file: Upload!): File!
 
+        searchProperty(title:String!): AllProperties
+        findProperty(id:String!): FindProp
+
+        addLikedProperty(id:String!):UserLiked!
+        removeLikedProperty(id:String!):UserLiked!
     }
 `;

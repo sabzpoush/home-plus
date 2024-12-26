@@ -1,6 +1,7 @@
 export const query = `#graphql
     type Query{
-        userPropertySubmited:Submited
+        userPropertySubmited:AllProperties
+        likeProperty:AllProperties
 
         allSale:[Sale]
         topViewedSales:[Sale]
