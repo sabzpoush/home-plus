@@ -1,3 +1,4 @@
+import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json';
 import {sale} from './types/sale.type';
 import {user,auth} from './types/user.type';
 import {rent} from './types/rent.type';
@@ -14,9 +15,15 @@ import { filterSaleInput,
     submitSaleInput ,
     editSale,editBuyer,editRent, editUser,filterRentInput } from './types/input/input.type';
 import {submitedType} from './types/input/query.type';
+import {unionTypes} from './types/union/union.type';
+import {allResolvers} from './resolvers/all.resolver';
+import {scalerType as scalarType} from './types/scaler/scalar.type';
+
 
 
 export const typeDefs = `#graphql
+    #scaler
+    ${scalarType}
     # enum
     ${enumTypes}
     # input 
@@ -35,6 +42,8 @@ export const typeDefs = `#graphql
     ${rent}
     ${user}
     ${auth}
+    #union
+    ${unionTypes}
     # query
     ${submitedType}
     ${query}
@@ -43,11 +52,26 @@ export const typeDefs = `#graphql
 `;
 
 export const resolvers = {
+    // mixedPropertyType: {
+    //     __resolveType(obj) {
+    //       if (obj.type == "Rent") {
+    //         return obj.type;
+    //       } else if (obj.type == "Buyer") {
+    //         return obj.type;
+    //       } else if(obj !=null && obj != undefined && !obj.length){
+    //         return "Sale";
+    //       }
+    //       return null;
+    //     },
+    //   },
+    Json:GraphQLJSON,
+    JsonObject:GraphQLJSONObject,
     Query:{
         ...saleQuery,
         ...userQueryResolver
     },
     Mutation:{
+        ...allResolvers,
         ...rentResolver,
         ...saleResolver,
         ...userResolver,

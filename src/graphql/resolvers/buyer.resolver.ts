@@ -6,7 +6,7 @@ export const buyerResolver = {
     submitBuyer:async(_,{buyer:args},context)=>{
         const user:User = await userValidator(context.req);
         
-        const buyer = await prisma.buyer.create({data:{...args,user:{connect:user.id}}});
+        const buyer = await prisma.buyer.create({data:{...args,user:{connect:{id:user.id}}}});
         if(!buyer){
             throw new Error('در ثبت آگهی خرید شما مشکلی بوجودامد!');
         }
