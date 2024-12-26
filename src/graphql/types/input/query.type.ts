@@ -1,5 +1,5 @@
 export const submitedType = `#graphql
-    type Submited {
+    type AllProperties {
         sales:[Sale]
         rents:[Rent]
         buyers:[Buyer]
