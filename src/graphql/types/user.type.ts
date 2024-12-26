@@ -12,6 +12,17 @@ export const user = `#graphql
         Buyer:[Buyer]
         Rent:[Rent]
     }
+    scalar Upload
+
+    type File {
+      filename: String!
+      mimetype: String!
+      encoding: String!
+    }
+
+    type UserLiked {
+        message:String
+    }
 `;
 
 export const auth = `#graphql

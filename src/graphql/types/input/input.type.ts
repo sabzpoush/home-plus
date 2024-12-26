@@ -169,4 +169,3 @@ export const editUser = `#graphql
         token: String
     }
 `;
-
