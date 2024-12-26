@@ -17,7 +17,7 @@ import { filterSaleInput,
 import {submitedType} from './types/input/query.type';
 import {unionTypes} from './types/union/union.type';
 import {allResolvers} from './resolvers/all.resolver';
-import {scalerType as scalarType} from './types/scaler/scalar.type';
+import {scalarType} from './types/scaler/scalar.type';
 
 
 
