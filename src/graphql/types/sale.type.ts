@@ -21,6 +21,13 @@ export const sale = `#graphql
         user:User
         type:PropertyType
     }
+
+    type FilteredSale{
+        highToLowSales:[Sale]
+        lowToHighSales:[Sale]
+        newestSales:[Sale]
+        oldestSales:[Sale]
+    }
 `;
 
 

@@ -21,4 +21,13 @@ export const rent = `#graphql
         type:RentType
         user:User
     }
+
+    type FilteredRent{
+        highToLowMortgage:[Rent]
+        lowToHighMortgage:[Rent]
+        highToLowRent:[Rent]
+        lowToHighRent:[Rent]
+        newestRent:[Rent]
+        oldestRent:[Rent]
+    }
 `;
