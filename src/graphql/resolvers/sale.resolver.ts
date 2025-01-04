@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 import {userValidator} from '../../utils/auth/auth.util';
 
 
-export const saleResolver = {
+export const saleMutation = {
     submitSale:async(_,{sale:args},context)=>{
         const user:User = await userValidator(context.req);
         
@@ -126,6 +126,36 @@ export const saleResolver = {
         if(!sale) throw new Error('حذف ملک با خطا مواجه شد!');
         return `ملک ${sale.title} با موفقیت حذف شد!`;
     },
+    highToLowSale:async(_,{reverse},context)=>{
+        const sales = (await prisma.sale.findMany({})).sort((s1,s2)=>  +s2.price - +s1.price);
+       
+        if(!sales.length) throw new Error("ملکی در سایت موجود نیست!");
+
+        if(reverse){
+            sales.reverse();
+        };
+
+        return sales;
+    },
+    filteredSale:async(_,{type},context)=>{
+        let sales = await prisma.sale.findMany();
+        if(type){
+            sales = sales.filter((sale)=> sale.type.toString() == type.toString());
+        };
+        
+        const highToLowSales = [...sales].sort((s1, s2) => +s2.price - +s1.price);
+        const lowToHighSales = [...sales].sort((s1, s2) => +s1.price - +s2.price);
+        
+        const newestSales = [...sales].sort((s1, s2) => +s2.submitedAt - +s1.submitedAt);
+        const oldestSales = [...sales].sort((s1, s2) => +s1.submitedAt - +s2.submitedAt);
+
+        return {
+            highToLowSales,
+            lowToHighSales,
+            newestSales,
+            oldestSales,
+        };
+    },
 };
 
 export const saleQuery = {
@@ -146,5 +176,6 @@ export const saleQuery = {
         const sales = (await prisma.sale.findMany());
         if(sales.length == 0) throw new Error("ملکی در سایت ثبت نشده است!");
         return sales;
-    }
+    },
+    
 }

@@ -2,7 +2,7 @@ import {PrismaClient} from '@prisma/client';
 const prisma = new PrismaClient();
 import {userValidator} from '../../utils/auth/auth.util';
 
-export const allResolvers = {
+export const allResolversMutation = {
     findProperty:async(_,{id},context)=>{
         const property =
             await prisma.sale.findUnique({where:{id}}) ||
@@ -37,5 +37,23 @@ export const allResolvers = {
         
         return {sales,rents,buyers};
     },
+    newProp:async(_,{reverse},context)=>{
+        const sales = await prisma.sale.findMany();
+        const rents = await prisma.rent.findMany();
+        const buyers = await prisma.buyer.findMany();
+
+        let property = [...sales,...rents,...buyers];
+
+        property.sort((item1,item2)=> +item2.submitedAt - +item1.submitedAt);
+        if(reverse){
+          property.reverse();
+        }
+        const data = JSON.stringify(property);
+
+        return {data};
+    }
+};
+
+export const allResolversQuery = {
 
 }

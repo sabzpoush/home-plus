@@ -1,6 +1,5 @@
 import {PrismaClient, User,Rent} from '@prisma/client'
 import { userValidator } from '../../utils/auth/auth.util';
-import { saleResolver } from './sale.resolver';
 const prisma = new PrismaClient();
 
 export const rentResolver = {
@@ -88,6 +87,28 @@ export const rentResolver = {
         const rent = await prisma.rent.delete({where:{id,userId:user.id}});
         if(!rent) throw new Error('حذف ملک با خطا مواجه شد!');
         return `آگهی رهن ${rent.title} با موفقیت حذف شد!`;
+    },
+    highToLowMortgage:async(_,{reverse},context)=>{
+        const rents = (await prisma.rent.findMany({})).sort((s1,s2)=>  +s2.mortgage - +s1.mortgage);
+       
+        if(!rents.length) throw new Error("ملکی برای اجاره در سایت موجود نیست!");
+
+        if(reverse){
+            rents.reverse();
+        };
+
+        return rents;
+    },
+    highToLowRent:async(_,{reverse},context)=>{
+        const rents = (await prisma.rent.findMany({})).sort((s1,s2)=>  +s2.rent - +s1.rent);
+       
+        if(!rents.length) throw new Error("ملکی برای اجاره در سایت موجود نیست!");
+
+        if(reverse){
+            rents.reverse();
+        };
+
+        return rents;
     }
 };
 
@@ -109,6 +130,27 @@ export const rentQuery = {
         const rents = (await prisma.rent.findMany());
         if(rents.length == 0) throw new Error("ملکی در سایت ثبت نشده است!");
         return rents;
-    }
+    },
+    filteredRent:async()=>{
+        const rents = await prisma.rent.findMany({});
+
+        const highToLowMortgage = [...rents].sort((s1, s2) => +s2.mortgage - +s1.mortgage);
+        const lowToHighMortgage = [...highToLowMortgage].reverse();
+        
+        const highToLowRent = [...rents].sort((s1, s2) => +s2.rent - +s1.rent);
+        const lowToHighRent = [...highToLowRent].reverse();
+        
+        const newestRent = [...rents].sort((s1, s2) => +s2.submitedAt - +s1.submitedAt);
+        const oldestRent = [...newestRent].reverse();
+
+        return {
+            highToLowMortgage,
+            lowToHighMortgage,
+            highToLowRent,
+            lowToHighRent,
+            newestRent,
+            oldestRent,
+        };
+    },
 }
 

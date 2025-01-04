@@ -2,7 +2,7 @@ import {PrismaClient, User} from '@prisma/client'
 const prisma = new PrismaClient();
 import {createToken} from '../../utils/auth/token.util';
 import bcrypt from 'bcrypt';
-import { userValidator } from '../../utils/auth/auth.util';
+import { userValidator, verifyUserToken } from '../../utils/auth/auth.util';
 import fs from 'fs';
 import path from 'path';
 
@@ -19,7 +19,9 @@ export const userResolver = {
             if(!isValidPassword){
                 throw new Error('نام کاربری یا رمز عبور اشتباه است!')
             }
-            return {token:user.token,user};
+            const token:string = createToken(email) as string;
+            const changeUserToken = await prisma.user.update({where:{id:user.id},data:{token}});
+            return {token,user:changeUserToken};
         }catch(err){
             throw new Error(`خطای ناشناخته! ${err}`);
         }
@@ -27,7 +29,7 @@ export const userResolver = {
     register:async(_,args)=>{
         try{
             const {email}  = args;
-            const token = createToken(email);
+            const token:string = createToken(email) as string;
             const salt = bcrypt.genSaltSync(10);
             const hashPassword = bcrypt.hashSync(args.password,salt);
             const checkUser = await prisma.user.findUnique({where:{email}});
@@ -113,7 +115,11 @@ export const userResolver = {
             throw new Error('در حذف ملک از علاقه مندی مشکلی رخ داد!');
         }
         return {message:'ملک انتخابی از علاقه مندی ها حذف گردید!'};
-    }
+    },
+    checkUserToken:async(_,{},context)=>{
+        const tokenStat = await verifyUserToken(context.req);
+        return tokenStat;
+    },
    
 };
 

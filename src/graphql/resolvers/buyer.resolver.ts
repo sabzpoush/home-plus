@@ -6,6 +6,9 @@ export const buyerResolver = {
     submitBuyer:async(_,{buyer:args},context)=>{
         const user:User = await userValidator(context.req);
         
+        if (["Rent", "EcoRent"].includes(args.type.toString())) {
+            args.price = null;
+        }
         const buyer = await prisma.buyer.create({data:{...args,user:{connect:{id:user.id}}}});
         if(!buyer){
             throw new Error('در ثبت آگهی خرید شما مشکلی بوجودامد!');
@@ -46,6 +49,17 @@ export const buyerResolver = {
         const buyer = await prisma.buyer.delete({where:{id,userId:user.id}});
         if(!buyer) throw new Error('حذف ملک با خطا مواجه شد!');
         return `آگهی خرید ${buyer.title} با موفقیت حذف شد!`;
+    },
+    highToLowBuyers:async(_,{reverse},context)=>{
+        const buyers = (await prisma.buyer.findMany({})).sort((s1,s2)=>  +s2.mortgage - +s1.mortgage);
+       
+        if(!buyers.length) throw new Error("ملکی برای اجاره در سایت موجود نیست!");
+
+        if(reverse){
+            buyers.reverse();
+        };
+
+        return buyers;
     }
 };
 
