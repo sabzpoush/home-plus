@@ -1,8 +1,9 @@
 export const mutation = `#graphql
     type Mutation{
         register(email:String!,password:String!):Auth
-        login(email:String!,password:String):Auth
+        login(email:String!,password:String!):Auth
         editUser(user:UserEdit):User
+        checkUserToken:Boolean
     
         submitSale(
             sale:SaleInput
@@ -54,8 +55,15 @@ export const mutation = `#graphql
 
         searchProperty(title:String!): AllProperties
         findProperty(id:String!): FindProp
+        newProp(reverse:Boolean):Json!
 
         addLikedProperty(id:String!):UserLiked!
         removeLikedProperty(id:String!):UserLiked!
+
+        highToLowSale(reverse:Boolean):[Sale]
+        highToLowMortgage(reverse:Boolean):[Rent]
+        highToLowRent(reverse:Boolean):[Rent]
+
+        filteredSale(type:String):FilteredSale
     }
 `;

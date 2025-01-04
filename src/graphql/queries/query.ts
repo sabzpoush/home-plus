@@ -10,5 +10,6 @@ export const query = `#graphql
         allRent:[Rent]
         topViewedRents:[Rent]
         newRents:[Rent]
+        filteredRent:FilteredRent
     }
 `;
