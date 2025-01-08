@@ -66,7 +66,39 @@ export const buyerResolver = {
 export const buyerQuery = {
     allBuyer:async()=>{
         const buyers = await prisma.buyer.findMany();
-        if(buyers.length == 0) throw new Error("آگهی خریدی فعلا نیست!");
+        if(buyers.length == 0) throw new Error("آگهی خرید یا متقاضی فعلا نیست!");
         return buyers;
-    }
+    },
+    filteredBuyers:async()=>{
+        const buyers = await prisma.buyer.findMany();
+        if(buyers.length == 0) throw new Error("آگهی خرید یا متقاضی فعلا نیست!");
+
+        const newsetBuyer = [...buyers].sort((buyer1,buyer2)=> +buyer2.submitedAt - +buyer1.submitedAt);
+        const oldestBuyer = [...buyers].reverse();
+
+        const highToLowBuyers = [...buyers]
+            .filter((buyer)=> buyer.type.toString() == "Buyer")
+            .sort((buyer1,buyer2)=>buyer2.price - buyer1.price);
+        const lowToHighBuyers = [...highToLowBuyers].reverse();
+
+        const highToLowAskerRent = [...buyers]
+            .filter((buyer)=>buyer.type.toString() == "Asker")
+            .sort((buyer1,buyer2)=> +buyer2.rent - +buyer1.rent);
+        const lowToHighAskerRent = [...highToLowAskerRent].reverse();
+
+        const highToLowAskerMortgage = [...buyers]  
+            .filter((buyer)=>buyer.type.toString() == "Asker")
+            .sort((buyer1,buyer2)=> +buyer2.mortgage - +buyer1.mortgage);
+        const lowToHighAskerMortgage = [...highToLowAskerMortgage].reverse();
+
+        return {
+            newsetBuyer,
+            oldestBuyer,
+            highToLowBuyers,
+            lowToHighBuyers,
+            highToLowAskerRent,
+            lowToHighAskerRent,
+            lowToHighAskerMortgage,
+        };
+    },  
 };

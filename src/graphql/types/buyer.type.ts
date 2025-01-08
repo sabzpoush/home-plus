@@ -19,8 +19,18 @@ export const buyer = `#graphql
         warehouse:Boolean
         tag:[String]
         submitedAt:String!
-        type:BuyerType
+        type:BuyerType!
         property:[BuyerRequestType]
         user:User
+    }
+
+    type FilteredBuyer{
+        newsetBuyer,
+            oldestBuyer:[Buyer],
+            highToLowBuyers:[Buyer],
+            lowToHighBuyers:[Buyer],
+            highToLowAskerRent:[Buyer],
+            lowToHighAskerRent:[Buyer],
+            lowToHighAskerMortgage:[Buyer],
     }
 `;
