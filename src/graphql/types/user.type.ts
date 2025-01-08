@@ -23,6 +23,11 @@ export const user = `#graphql
     type UserLiked {
         message:String
     }
+
+    type AuthResult {
+        user:User!
+        tokenStat:Boolean!
+    }
 `;
 
 export const auth = `#graphql

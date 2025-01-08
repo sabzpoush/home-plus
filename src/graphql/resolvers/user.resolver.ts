@@ -118,9 +118,9 @@ export const userResolver = {
     },
     checkUserToken:async(_,{},context)=>{
         const tokenStat = await verifyUserToken(context.req);
-        return tokenStat;
+        const user = await userValidator(context.req);
+        return {user,tokenStat};
     },
-   
 };
 
 

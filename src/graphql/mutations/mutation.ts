@@ -3,7 +3,7 @@ export const mutation = `#graphql
         register(email:String!,password:String!):Auth
         login(email:String!,password:String!):Auth
         editUser(user:UserEdit):User
-        checkUserToken:Boolean
+        checkUserToken:AuthResult
     
         submitSale(
             sale:SaleInput
