@@ -18,6 +18,7 @@ import {allPropertiesType} from './types/input/query.type';
 import {unionTypes} from './types/union/union.type';
 import {allResolversMutation,allResolversQuery} from './resolvers/all.resolver';
 import {scalarType} from './types/scalar/scalar.type';
+import { buyerQuery } from './resolvers/buyer.resolver';
 
 
 export const typeDefs = `#graphql
@@ -66,6 +67,7 @@ export const resolvers = {
     Json:GraphQLJSON,
     JsonObject:GraphQLJSONObject,
     Query:{
+        ...buyerQuery,
         ...saleQuery,
         ...rentQuery,
         ...userQueryResolver,

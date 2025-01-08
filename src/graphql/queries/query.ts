@@ -11,5 +11,8 @@ export const query = `#graphql
         topViewedRents:[Rent]
         newRents:[Rent]
         filteredRent:FilteredRent
+
+        allBuyer:[Buyer]
+        filteredBuyer:FilteredBuyer
     }
 `;
