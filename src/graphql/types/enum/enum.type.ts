@@ -19,6 +19,7 @@ export const enumTypes = `#graphql
 
     enum BuyerType{
         Buyer
+        Asker
     }
 
     enum RentType{
