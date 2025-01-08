@@ -22,6 +22,7 @@ enum PropertyType {
   Land
   Resident
   Buyer
+  Asker
   Rent
 }
 
@@ -82,7 +83,7 @@ model Buyer {
   tag           String[]
   submitedAt    DateTime       @default(now())
   userId        String
-  type          PropertyType   @default(Buyer)
+  type          PropertyType
   property      PropertyType[]
   watchCount Int @default(0)
 }
