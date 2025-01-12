@@ -23,5 +23,5 @@ export const rentSchema = joi.object({
     parking: joi.boolean(),
     warehouse: joi.boolean(),
     tag: joi.array().items(joi.string().max(24).min(3)),
-    type: joi.string().valid('Rent').required()
+    type: joi.string().valid('Rent','EcoRent').required()
 })
