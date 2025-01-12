@@ -54,7 +54,7 @@ export const saleMutation = {
         const sale = await prisma.sale.findMany({
             where:{
                 AND:[
-                    {...(room !== undefined && { room:{lte:room}})},
+                    {...(room !== undefined && { room:{gte:room}})},
                     {...(priceFrom !== undefined &&{price:{gte:priceFrom}})},
                     {...(priceTo !== undefined &&{price:{lte:priceTo}})},
                     {buildYear:{gte:buildYearFrom,lte:buildYearTo}},
