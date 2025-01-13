@@ -62,6 +62,7 @@ model Sale {
   submitedAt DateTime     @default(now())
   userId     String
   type       PropertyType
+  mainType String @default("Sale")
   watchCount Int @default(0)
 }
 
@@ -84,6 +85,7 @@ model Buyer {
   submitedAt    DateTime       @default(now())
   userId        String
   type          PropertyType
+  mainType String @default("Buyer")
   property      PropertyType[]
   watchCount Int @default(0)
 }
@@ -109,5 +111,6 @@ model Rent {
   submitedAt DateTime     @default(now())
   userId     String
   type       PropertyType @default(Rent)
+  mainType String @default("Rent")
   watchCount Int @default(0)
 }
