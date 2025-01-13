@@ -98,6 +98,7 @@ export const buyerQuery = {
             lowToHighBuyers,
             highToLowAskerRent,
             lowToHighAskerRent,
+            highToLowAskerMortgage,
             lowToHighAskerMortgage,
         };
     },  

@@ -37,12 +37,18 @@ export const allResolversMutation = {
         
         return {sales,rents,buyers};
     },
-    newProp:async(_,{reverse},context)=>{
+    newProp:async(_,{reverse,category,type},context)=>{
         const sales = await prisma.sale.findMany();
         const rents = await prisma.rent.findMany();
         const buyers = await prisma.buyer.findMany();
 
         let property = [...sales,...rents,...buyers];
+        if(category){
+            property = property.filter((prop)=> prop.mainType.toString() == category.toString());
+        }
+        if(type){
+            property = property.filter((prop)=> prop.type.toString() == type.toString());
+        }
 
         property.sort((item1,item2)=> +item2.submitedAt - +item1.submitedAt);
         if(reverse){
@@ -55,5 +61,7 @@ export const allResolversMutation = {
 };
 
 export const allResolversQuery = {
+    filteredAllProperty:async()=>{
 
+    },
 }

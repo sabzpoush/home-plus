@@ -109,7 +109,31 @@ export const rentResolver = {
         };
 
         return rents;
-    }
+    },
+    filteredRent:async(_,{type},context)=>{
+        let rents = await prisma.rent.findMany({});
+
+        if(type){
+            rents = rents.filter((rent)=> rent.type.toString() == type.toString());
+        }
+        const highToLowMortgage = [...rents].sort((s1, s2) => +s2.mortgage - +s1.mortgage);
+        const lowToHighMortgage = [...highToLowMortgage].reverse();
+        
+        const highToLowRent = [...rents].sort((s1, s2) => +s2.rent - +s1.rent);
+        const lowToHighRent = [...highToLowRent].reverse();
+        
+        const newestRent = [...rents].sort((s1, s2) => +s2.submitedAt - +s1.submitedAt);
+        const oldestRent = [...newestRent].reverse();
+
+        return {
+            highToLowMortgage,
+            lowToHighMortgage,
+            highToLowRent,
+            lowToHighRent,
+            newestRent,
+            oldestRent,
+        };
+    },
 };
 
 export const rentQuery = {
@@ -130,27 +154,6 @@ export const rentQuery = {
         const rents = (await prisma.rent.findMany());
         if(rents.length == 0) throw new Error("ملکی در سایت ثبت نشده است!");
         return rents;
-    },
-    filteredRent:async()=>{
-        const rents = await prisma.rent.findMany({});
-
-        const highToLowMortgage = [...rents].sort((s1, s2) => +s2.mortgage - +s1.mortgage);
-        const lowToHighMortgage = [...highToLowMortgage].reverse();
-        
-        const highToLowRent = [...rents].sort((s1, s2) => +s2.rent - +s1.rent);
-        const lowToHighRent = [...highToLowRent].reverse();
-        
-        const newestRent = [...rents].sort((s1, s2) => +s2.submitedAt - +s1.submitedAt);
-        const oldestRent = [...newestRent].reverse();
-
-        return {
-            highToLowMortgage,
-            lowToHighMortgage,
-            highToLowRent,
-            lowToHighRent,
-            newestRent,
-            oldestRent,
-        };
     },
 }
 
