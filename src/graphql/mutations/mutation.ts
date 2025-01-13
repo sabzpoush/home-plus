@@ -55,7 +55,7 @@ export const mutation = `#graphql
 
         searchProperty(title:String!): AllProperties
         findProperty(id:String!): FindProp
-        newProp(reverse:Boolean):Json!
+        newProp(reverse:Boolean,category:MainType,type:PropertyFilterType):Json!
 
         addLikedProperty(id:String!):UserLiked!
         removeLikedProperty(id:String!):UserLiked!

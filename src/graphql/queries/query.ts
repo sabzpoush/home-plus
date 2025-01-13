@@ -13,6 +13,7 @@ export const query = `#graphql
         filteredRent:FilteredRent
 
         allBuyer:[Buyer]
-        filteredBuyer:FilteredBuyer
+        filteredBuyers:FilteredBuyer
+        filteredAllProperty:Json
     }
 `;
