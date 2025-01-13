@@ -25,12 +25,13 @@ export const buyer = `#graphql
     }
 
     type FilteredBuyer{
-        newsetBuyer,
-            oldestBuyer:[Buyer],
-            highToLowBuyers:[Buyer],
-            lowToHighBuyers:[Buyer],
-            highToLowAskerRent:[Buyer],
-            lowToHighAskerRent:[Buyer],
-            lowToHighAskerMortgage:[Buyer],
+        newsetBuyer:[Buyer],
+        oldestBuyer:[Buyer],
+        highToLowBuyers:[Buyer],
+        lowToHighBuyers:[Buyer],
+        highToLowAskerRent:[Buyer],
+        lowToHighAskerRent:[Buyer],
+        highToLowAskerMortgage:[Buyer],
+        lowToHighAskerMortgage:[Buyer],
     }
 `;
