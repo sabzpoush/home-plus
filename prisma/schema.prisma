@@ -16,6 +16,7 @@ datasource db {
 enum PropertyType {
   Eco
   EcoRent
+  DailyRent
   Apartment
   Pilot
   Basement
