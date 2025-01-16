@@ -1,6 +1,6 @@
 import {PrismaClient, User,Rent} from '@prisma/client'
 import { userValidator } from '../../utils/auth/auth.util';
-import { rentfilter } from 'src/utils/helper/filter';
+import { rentfilter } from '../../utils/helper/filter';
 const prisma = new PrismaClient();
 
 export const rentResolver = {
@@ -89,31 +89,13 @@ export const rentResolver = {
         if(!rent) throw new Error('حذف ملک با خطا مواجه شد!');
         return `آگهی رهن ${rent.title} با موفقیت حذف شد!`;
     },
-    highToLowMortgage:async(_,{reverse},context)=>{
-        const rents = (await prisma.rent.findMany({})).sort((s1,s2)=>  +s2.mortgage - +s1.mortgage);
-       
-        if(!rents.length) throw new Error("ملکی برای اجاره در سایت موجود نیست!");
-
-        if(reverse){
-            rents.reverse();
-        };
-
-        return rents;
-    },
-    highToLowRent:async(_,{reverse},context)=>{
-        const rents = (await prisma.rent.findMany({})).sort((s1,s2)=>  +s2.rent - +s1.rent);
-       
-        if(!rents.length) throw new Error("ملکی برای اجاره در سایت موجود نیست!");
-
-        if(reverse){
-            rents.reverse();
-        };
-
-        return rents;
-    },
     filteredRent:async(_,{type},context)=>{
         let rents = await prisma.rent.findMany({});
         if(rents.length === 0) throw new Error("آگهی اجاره در سایت ثبت نشده است!");
+
+        if(type){
+            rents = rents.filter((rent)=>rent.type.toString() === type.toString());
+        };
 
         const filter = rentfilter(rents);
         return filter;

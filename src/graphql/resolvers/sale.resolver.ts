@@ -1,7 +1,7 @@
 import {PrismaClient,User,Sale} from '@prisma/client'
 const prisma = new PrismaClient();
 import {userValidator} from '../../utils/auth/auth.util';
-import { saleFilter } from 'src/utils/helper/filter';
+import { saleFilter } from '../../utils/helper/filter';
 
 
 export const saleMutation = {

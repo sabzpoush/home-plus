@@ -1,7 +1,6 @@
 import { PrismaClient, User } from '@prisma/client';
 import { userValidator } from '../../utils/auth/auth.util';
-import { buyerFilter } from 'src/utils/helper/filter';
-import { buyer } from '../types/buyer.type';
+import { buyerFilter } from '../../utils/helper/filter';
 const prisma = new PrismaClient();
 
 export const buyerResolver = {
@@ -52,17 +51,21 @@ export const buyerResolver = {
         if(!buyer) throw new Error('حذف ملک با خطا مواجه شد!');
         return `آگهی خرید ${buyer.title} با موفقیت حذف شد!`;
     },
-    highToLowBuyers:async(_,{reverse},context)=>{
-        const buyers = (await prisma.buyer.findMany({})).sort((s1,s2)=>  +s2.mortgage - +s1.mortgage);
-       
-        if(!buyers.length) throw new Error("ملکی برای اجاره در سایت موجود نیست!");
+    filteredBuyers:async(_,{category,requestType},context)=>{
+        let buyers = await prisma.buyer.findMany();
+        if(buyers.length == 0) throw new Error("آگهی خرید یا متقاضی فعلا نیست!");
 
-        if(reverse){
-            buyers.reverse();
+        if(category){
+            buyers = buyers.filter((buyer)=> buyer.type.toString() == category.toString());
         };
 
-        return buyers;
-    }
+        if(requestType){
+            buyers = buyers.filter((buyer)=> buyer.property.includes(requestType));
+        };
+
+        const filter = buyerFilter(buyers);
+        return filter;
+    },
 };
 
 export const buyerQuery = {
@@ -70,12 +73,5 @@ export const buyerQuery = {
         const buyers = await prisma.buyer.findMany();
         if(buyers.length == 0) throw new Error("آگهی خرید یا متقاضی فعلا نیست!");
         return buyers;
-    },
-    filteredBuyers:async()=>{
-        const buyers = await prisma.buyer.findMany();
-        if(buyers.length == 0) throw new Error("آگهی خرید یا متقاضی فعلا نیست!");
-
-        const filter = buyerFilter(buyers);
-        return filter;
-    },  
+    }  
 };
