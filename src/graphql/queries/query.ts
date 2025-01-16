@@ -8,10 +8,8 @@ export const query = `#graphql
 
         allRent:[Rent]
         topViewedRents:[Rent]
-        filteredRent:FilteredRent
 
         allBuyer:[Buyer]
-        filteredBuyers:FilteredBuyer
         filteredAllProperty:Json
     }
 `;

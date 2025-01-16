@@ -61,9 +61,11 @@ export const mutation = `#graphql
         removeLikedProperty(id:String!):UserLiked!
 
         highToLowSale(reverse:Boolean):[Sale]
-        highToLowMortgage(reverse:Boolean):[Rent]
-        highToLowRent(reverse:Boolean):[Rent]
 
-        filteredSale(type:String):FilteredSale
+        filteredSale(type:PropertyType):FilteredSale
+        filteredRent(type:RentType):FilteredRent
+        filteredBuyers(category:BuyerType,type:BuyerRequestType):FilteredBuyer
+        
+
     }
 `;
