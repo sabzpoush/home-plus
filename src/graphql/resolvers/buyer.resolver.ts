@@ -1,6 +1,6 @@
 import { PrismaClient, User } from '@prisma/client';
 import { userValidator } from '../../utils/auth/auth.util';
-import { filterBuyer } from 'src/utils/helper/filter';
+import { buyerFilter } from 'src/utils/helper/filter';
 import { buyer } from '../types/buyer.type';
 const prisma = new PrismaClient();
 
@@ -75,7 +75,7 @@ export const buyerQuery = {
         const buyers = await prisma.buyer.findMany();
         if(buyers.length == 0) throw new Error("آگهی خرید یا متقاضی فعلا نیست!");
 
-        const filter = filterBuyer(buyers);
+        const filter = buyerFilter(buyers);
         return filter;
     },  
 };

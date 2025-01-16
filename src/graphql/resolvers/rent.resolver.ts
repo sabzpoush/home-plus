@@ -1,6 +1,6 @@
 import {PrismaClient, User,Rent} from '@prisma/client'
 import { userValidator } from '../../utils/auth/auth.util';
-import { filterRent } from 'src/utils/helper/filter';
+import { rentfilter } from 'src/utils/helper/filter';
 const prisma = new PrismaClient();
 
 export const rentResolver = {
@@ -115,7 +115,7 @@ export const rentResolver = {
         let rents = await prisma.rent.findMany({});
         if(rents.length === 0) throw new Error("آگهی اجاره در سایت ثبت نشده است!");
 
-        const filter = filterRent(rents);
+        const filter = rentfilter(rents);
         return filter;
     },
 };
@@ -132,11 +132,6 @@ export const rentQuery = {
             throw new Error('ملکی در سایت موجود نیست');
         }
 
-        return rents;
-    },
-    newRents:async()=>{
-        const rents = (await prisma.rent.findMany());
-        if(rents.length == 0) throw new Error("ملکی در سایت ثبت نشده است!");
         return rents;
     },
 }

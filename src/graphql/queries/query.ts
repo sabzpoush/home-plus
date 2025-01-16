@@ -5,11 +5,9 @@ export const query = `#graphql
 
         allSale:[Sale]
         topViewedSales:[Sale]
-        newSales:[Sale]
 
         allRent:[Rent]
         topViewedRents:[Rent]
-        newRents:[Rent]
         filteredRent:FilteredRent
 
         allBuyer:[Buyer]

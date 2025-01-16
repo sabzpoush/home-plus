@@ -163,10 +163,5 @@ export const saleQuery = {
 
         return sales;
     },
-    newSales:async()=>{
-        const sales = (await prisma.sale.findMany());
-        if(sales.length == 0) throw new Error("ملکی در سایت ثبت نشده است!");
-        return sales;
-    },
-    
+
 }
