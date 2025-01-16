@@ -1,6 +1,7 @@
 import {PrismaClient,User,Sale} from '@prisma/client'
 const prisma = new PrismaClient();
 import {userValidator} from '../../utils/auth/auth.util';
+import { saleFilter } from 'src/utils/helper/filter';
 
 
 export const saleMutation = {
@@ -143,18 +144,8 @@ export const saleMutation = {
             sales = sales.filter((sale)=> sale.type.toString() == type.toString());
         };
         
-        const highToLowSales = [...sales].sort((s1, s2) => +s2.price - +s1.price);
-        const lowToHighSales = [...sales].sort((s1, s2) => +s1.price - +s2.price);
-        
-        const newestSales = [...sales].sort((s1, s2) => +s2.submitedAt - +s1.submitedAt);
-        const oldestSales = [...sales].sort((s1, s2) => +s1.submitedAt - +s2.submitedAt);
-
-        return {
-            highToLowSales,
-            lowToHighSales,
-            newestSales,
-            oldestSales,
-        };
+        const filter = saleFilter(sales);
+        return filter;
     },
 };
 

@@ -1,5 +1,6 @@
 import {PrismaClient, User,Rent} from '@prisma/client'
 import { userValidator } from '../../utils/auth/auth.util';
+import { filterRent } from 'src/utils/helper/filter';
 const prisma = new PrismaClient();
 
 export const rentResolver = {
@@ -112,27 +113,10 @@ export const rentResolver = {
     },
     filteredRent:async(_,{type},context)=>{
         let rents = await prisma.rent.findMany({});
+        if(rents.length === 0) throw new Error("آگهی اجاره در سایت ثبت نشده است!");
 
-        if(type){
-            rents = rents.filter((rent)=> rent.type.toString() == type.toString());
-        }
-        const highToLowMortgage = [...rents].sort((s1, s2) => +s2.mortgage - +s1.mortgage);
-        const lowToHighMortgage = [...highToLowMortgage].reverse();
-        
-        const highToLowRent = [...rents].sort((s1, s2) => +s2.rent - +s1.rent);
-        const lowToHighRent = [...highToLowRent].reverse();
-        
-        const newestRent = [...rents].sort((s1, s2) => +s2.submitedAt - +s1.submitedAt);
-        const oldestRent = [...newestRent].reverse();
-
-        return {
-            highToLowMortgage,
-            lowToHighMortgage,
-            highToLowRent,
-            lowToHighRent,
-            newestRent,
-            oldestRent,
-        };
+        const filter = filterRent(rents);
+        return filter;
     },
 };
 
