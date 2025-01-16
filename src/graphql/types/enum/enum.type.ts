@@ -33,6 +33,7 @@ export const enumTypes = `#graphql
         Land
         Resident
         Rent
+        EcoRent
     }
 
     enum BuyerType{
@@ -42,6 +43,7 @@ export const enumTypes = `#graphql
 
     enum RentType{
         Rent
+        DailyRent
         EcoRent
     }
 `;
