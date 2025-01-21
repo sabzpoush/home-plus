@@ -25,7 +25,7 @@ export const user = `#graphql
     }
 
     type AuthResult {
-        user:User!
+        user:Json
         tokenStat:Boolean!
     }
 `;

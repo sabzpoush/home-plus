@@ -2,7 +2,7 @@ import {PrismaClient, User} from '@prisma/client'
 const prisma = new PrismaClient();
 import {createToken} from '../../utils/auth/token.util';
 import bcrypt from 'bcrypt';
-import { userValidator, verifyUserToken } from '../../utils/auth/auth.util';
+import { userTokenValidator, userValidator, verifyUserToken } from '../../utils/auth/auth.util';
 import fs from 'fs';
 import path from 'path';
 
@@ -118,7 +118,8 @@ export const userResolver = {
     },
     checkUserToken:async(_,{},context)=>{
         const tokenStat = await verifyUserToken(context.req);
-        const user = await userValidator(context.req);
+        const userResult = await userTokenValidator(context.req);
+        const user = JSON.stringify(userResult);
         return {user,tokenStat};
     },
 };
