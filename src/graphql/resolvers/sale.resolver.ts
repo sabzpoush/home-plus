@@ -32,7 +32,7 @@ export const saleMutation = {
 
         return updatedSale;
     },
-    filterSale:async(_,{filter},context)=>{
+    filterSaleByParameters:async(_,{filter},context)=>{
         const {
             room,
             priceFrom = 0,
@@ -138,7 +138,7 @@ export const saleMutation = {
 
         return sales;
     },
-    filteredSale:async(_,{type},context)=>{
+    orderSale:async(_,{type},context)=>{
         let sales = await prisma.sale.findMany();
         if(type){
             sales = sales.filter((sale)=> sale.type.toString() == type.toString());

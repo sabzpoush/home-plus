@@ -32,10 +32,10 @@ export const mutation = `#graphql
             buyer:BuyerEdit
         ):Buyer
 
-        filterSale(
+        filterSaleByParameters(
             filter:FilterSaleInput
         ):[Sale]
-        filterRent(
+        filterRentByParameters(
             filter:FilterRentInput
         ):[Rent]
 
@@ -62,9 +62,9 @@ export const mutation = `#graphql
 
         highToLowSale(reverse:Boolean):[Sale]
 
-        filteredSale(type:PropertyType):FilteredSale
-        filteredRent(type:RentType):FilteredRent
-        filteredBuyers(category:BuyerType,type:BuyerRequestType):FilteredBuyer
+        orderSale(type:PropertyType):FilteredSale
+        orderRent(type:RentType):FilteredRent
+        orderBuyer(category:BuyerType,type:BuyerRequestType):FilteredBuyer
         
 
     }

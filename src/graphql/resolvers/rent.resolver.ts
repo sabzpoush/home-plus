@@ -30,7 +30,7 @@ export const rentResolver = {
 
         return updatedRent;
     },
-    filterRent:async(_,{filter},context)=>{
+    filterRentByParameters:async(_,{filter},context)=>{
         const {
             room,
             mortgageFrom = 0,
@@ -89,7 +89,7 @@ export const rentResolver = {
         if(!rent) throw new Error('حذف ملک با خطا مواجه شد!');
         return `آگهی رهن ${rent.title} با موفقیت حذف شد!`;
     },
-    filteredRent:async(_,{type},context)=>{
+    orderRent:async(_,{type},context)=>{
         let rents = await prisma.rent.findMany({});
         if(rents.length === 0) throw new Error("آگهی اجاره در سایت ثبت نشده است!");
 

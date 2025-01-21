@@ -51,7 +51,7 @@ export const buyerResolver = {
         if(!buyer) throw new Error('حذف ملک با خطا مواجه شد!');
         return `آگهی خرید ${buyer.title} با موفقیت حذف شد!`;
     },
-    filteredBuyers:async(_,{category,requestType},context)=>{
+    orderBuyer:async(_,{category,requestType},context)=>{
         let buyers = await prisma.buyer.findMany();
         if(buyers.length == 0) throw new Error("آگهی خرید یا متقاضی فعلا نیست!");
 
