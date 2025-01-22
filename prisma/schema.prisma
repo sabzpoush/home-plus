@@ -13,17 +13,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum MainType {
+  Sale
+  Buyer
+  Asker
+  Rent
+}
+
 enum PropertyType {
   Eco
-  EcoRent
   DailyRent
   Apartment
   Pilot
   Basement
   Land
   Resident
-  Buyer
-  Asker
   Rent
 }
 
@@ -40,6 +44,32 @@ model User {
   Buyer        Buyer[]
   Rent         Rent[]
   Liked        String[]
+  House        House[]
+}
+
+model House {
+  id            String       @id @unique @default(uuid())
+  user          User         @relation(fields: [userId], references: [id])
+  title         String
+  price         Int?
+  mortgage      Int?
+  rent          Int?
+  sellerName    String?
+  phone         String
+  detail        String?
+  meterage        Int?
+  fromMeter     Int?
+  toMeter       Int?
+  room          Int?
+  buildYear Int?
+  fromBuildYear Int?
+  toBuildYear   Int?
+  tag           String[]
+  submitedAt    DateTime     @default(now())
+  userId        String
+  type          PropertyType
+  category      MainType
+  watchCount    Int          @default(0)
 }
 
 model Sale {
@@ -63,8 +93,8 @@ model Sale {
   submitedAt DateTime     @default(now())
   userId     String
   type       PropertyType
-  mainType String @default("Sale")
-  watchCount Int @default(0)
+  mainType   String       @default("Sale")
+  watchCount Int          @default(0)
 }
 
 model Buyer {
@@ -86,9 +116,9 @@ model Buyer {
   submitedAt    DateTime       @default(now())
   userId        String
   type          PropertyType
-  mainType String @default("Buyer")
+  mainType      String         @default("Buyer")
   property      PropertyType[]
-  watchCount Int @default(0)
+  watchCount    Int            @default(0)
 }
 
 model Rent {
@@ -112,6 +142,6 @@ model Rent {
   submitedAt DateTime     @default(now())
   userId     String
   type       PropertyType @default(Rent)
-  mainType String @default("Rent")
-  watchCount Int @default(0)
+  mainType   String       @default("Rent")
+  watchCount Int          @default(0)
 }
