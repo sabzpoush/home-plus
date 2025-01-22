@@ -68,7 +68,7 @@ export const mutation = `#graphql
         
 
         # Graphql Resolver For House 
-        submitHouse(house:HouseInput):House
+        submitHouse(house:HouseSubmit):House
         editHouse(house:HouseEdit):House
         filterHouseByParameters(filter:HouseFilter):[House]
         selfHouseFilter(filter:HouseFilter):[House]

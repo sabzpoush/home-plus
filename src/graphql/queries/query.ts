@@ -11,5 +11,8 @@ export const query = `#graphql
 
         allBuyer:[Buyer]
         filteredAllProperty:Json
+
+        allHouse:[house]
+        topViewedHouse:[House]
     }
 `;
