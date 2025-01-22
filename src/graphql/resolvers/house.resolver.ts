@@ -97,7 +97,7 @@ export const houseMutation = {
             where:{
                 AND:[
                     {userId:user.id},
-                    {category:{in:category}}
+                    {category:{in:category}},
                     {...(room !== undefined && { room:{lte:room}})},
                     {...(priceFrom !== undefined &&{price:{gte:priceFrom}})},
                     {...(priceTo !== undefined &&{price:{lte:priceTo}})},
