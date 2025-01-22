@@ -69,3 +69,49 @@ export function buyerFilter(buyers){
         lowToHighAskerMortgage,
     };
 };
+
+export function houseFilter(house){
+    const newsetBuyer = [...house].sort((buyer1,buyer2)=> +buyer2.submitedAt - +buyer1.submitedAt);
+    const oldestBuyer = [...house].reverse();
+
+    const highToLowBuyers = [...house]
+        .filter((buyer)=> buyer.type.toString() == "Buyer")
+        .sort((buyer1,buyer2)=>buyer2.price - buyer1.price);
+    const lowToHighBuyers = [...highToLowBuyers].reverse();
+
+    const highToLowAskerRent = [...house]
+        .filter((buyer)=>buyer.type.toString() == "Asker")
+        .sort((buyer1,buyer2)=> +buyer2.rent - +buyer1.rent);
+    const lowToHighAskerRent = [...highToLowAskerRent].reverse();
+
+    const highToLowAskerMortgage = [...house]  
+        .filter((buyer)=>buyer.type.toString() == "Asker")
+        .sort((buyer1,buyer2)=> +buyer2.mortgage - +buyer1.mortgage);
+    const lowToHighAskerMortgage = [...highToLowAskerMortgage].reverse();
+
+    const highToLowRentMortgage = [...house].sort((s1, s2) => +s2.mortgage - +s1.mortgage);
+    const lowToHighRentMortgage = [...highToLowRentMortgage].reverse();
+    
+    const highToLowRent = [...house].sort((s1, s2) => +s2.rent - +s1.rent);
+    const lowToHighRent = [...highToLowRent].reverse();
+
+    const highToLowSales = [...house].sort((s1, s2) => +s2.price - +s1.price);
+    const lowToHighSales = [...house].sort((s1, s2) => +s1.price - +s2.price);
+
+    return {
+        newsetBuyer,
+        oldestBuyer,
+        highToLowBuyers,
+        lowToHighBuyers,
+        highToLowAskerRent,
+        lowToHighAskerRent,
+        highToLowAskerMortgage,
+        lowToHighAskerMortgage,
+        highToLowRentMortgage,
+        lowToHighRentMortgage,
+        highToLowRent,
+        lowToHighRent,
+        highToLowSales,
+        lowToHighSales,
+    };
+};
