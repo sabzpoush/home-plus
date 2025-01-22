@@ -67,5 +67,15 @@ export const mutation = `#graphql
         orderBuyer(category:BuyerType,type:BuyerRequestType):FilteredBuyer
         
 
+        # Graphql Resolver For House 
+        submitHouse(house:HouseInput):House
+        editHouse(house:HouseEdit):House
+        filterHouseByParameters(filter:HouseFilter):[House]
+        selfHouseFilter(filter:HouseFilter):[House]
+        singleHouse(houseId:ID!):House
+        deleteHouse(houseId:ID!):String!
+        orderHouse(category:CategoryType,type:PropertyType):OrderHouse
+        
+
     }
 `;
