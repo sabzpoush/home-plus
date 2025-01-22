@@ -169,3 +169,69 @@ export const editUser = `#graphql
         token: String
     }
 `;
+
+export const houseInput = `#graphql
+    input HouseSubmit {
+        title:String!
+        price:Int
+        sellerName:String
+        phone:String!
+        address:String
+        detail:String
+        meterage:Int
+        fromMeter:Int
+        toMeter:Int
+        room:Int
+        buildYear:Int
+        fromBuildYear:Int
+        toBuildYear:Int
+        floor:Int
+        countFloor:Int
+        parking:Boolean
+        elvator:Boolean
+        warehouse:Boolean
+        tag:[String]
+        category:CategoryType!
+        type:BuyerType!
+    }
+
+    input HouseEdit {
+        title:String
+        price:Int
+        sellerName:String
+        phone:String
+        address:String
+        detail:String
+        meterage:Int
+        fromMeter:Int
+        toMeter:Int
+        room:Int
+        buildYear:Int
+        fromBuildYear:Int
+        toBuildYear:Int
+        floor:Int
+        countFloor:Int
+        parking:Boolean
+        elvator:Boolean
+        warehouse:Boolean
+        tag:[String]
+        property:PropertyType
+    }
+
+    input HouseFilter {
+        priceFrom:Int
+        priceTo:Int
+        mortgageFrom:Int,
+        mortgageTo:Int,
+        rentFrom:Int,
+        rentTo:Int,
+        buildYearFrom:Int
+        buildYearTo:Int
+        meterageFrom:Int
+        meterageTo:Int
+        category:CategoryType
+        type:[PropertyType]
+        room:Int
+        meterage:Int
+    }
+`;
