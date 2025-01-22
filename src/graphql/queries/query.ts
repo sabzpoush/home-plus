@@ -12,7 +12,7 @@ export const query = `#graphql
         allBuyer:[Buyer]
         filteredAllProperty:Json
 
-        allHouse:[house]
+        allHouse:[House]
         topViewedHouse:[House]
     }
 `;

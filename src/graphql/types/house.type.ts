@@ -1,4 +1,4 @@
-export const buyer = `#graphql
+export const HouseType = `#graphql
     type House{
         id:String!
         title:String!
@@ -26,7 +26,7 @@ export const buyer = `#graphql
         user:User!
     }
 
-    type FilteredBuyer{
+    type OrderHouse{
         newsetBuyer:[House],
         oldestBuyer:[House],
         highToLowBuyers:[House],

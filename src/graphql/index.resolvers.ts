@@ -21,7 +21,7 @@ import {allResolversMutation,allResolversQuery} from './resolvers/all.resolver';
 import {scalarType} from './types/scalar/scalar.type';
 import { buyerQuery } from './resolvers/buyer.resolver';
 import { houseQuery,houseMutation } from './resolvers/house.resolver';
-
+import {HouseType} from './types/house.type';
 
 export const typeDefs = `#graphql
     #scaler
@@ -39,6 +39,7 @@ export const typeDefs = `#graphql
     ${editUser}
     ${filterRentInput}
     # House
+    ${HouseType}
     ${houseInput}
     # main 
     ${sale}
@@ -64,13 +65,13 @@ export const resolvers = {
         ...rentQuery,
         ...userQueryResolver,
         ...allResolversQuery,
-        ...houseMutation,
+        ...houseQuery,
     },
     Mutation:{
         ...allResolversMutation,
         ...rentResolver,
         ...saleMutation,
         ...userResolver,
-        ...houseQuery,
+        ...houseMutation,
     }
 }
