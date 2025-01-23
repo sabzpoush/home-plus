@@ -8,9 +8,7 @@ export const user = `#graphql
         phone:String
         registerDate:String!
         token:String
-        Sale:[Sale]
-        Buyer:[Buyer]
-        Rent:[Rent]
+        house:[House]
     }
     scalar Upload
 
@@ -34,8 +32,5 @@ export const auth = `#graphql
     type Auth{
         token:String
         user:User!
-    }
-    type Test{
-        value:String
     }
 `;

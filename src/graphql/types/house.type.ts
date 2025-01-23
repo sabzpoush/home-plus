@@ -3,6 +3,8 @@ export const HouseType = `#graphql
         id:String!
         title:String!
         price:Int
+        mortgage:Int
+        rent:Int
         sellerName:String
         phone:String!
         address:String
