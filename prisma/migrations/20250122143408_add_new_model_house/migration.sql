@@ -1,5 +1,8 @@
 -- CreateEnum
-CREATE TYPE "PropertyType" AS ENUM ('Eco', 'EcoRent', 'Apartment', 'Pilot', 'Basement', 'Land', 'Resident', 'Buyer', 'Asker', 'Rent');
+CREATE TYPE "MainType" AS ENUM ('Sale', 'Buyer', 'Asker', 'Rent');
+
+-- CreateEnum
+CREATE TYPE "PropertyType" AS ENUM ('Eco', 'DailyRent', 'Apartment', 'Pilot', 'Basement', 'Land', 'Resident', 'Rent');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -14,6 +17,31 @@ CREATE TABLE "User" (
     "Liked" TEXT[],
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "House" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "price" INTEGER,
+    "mortgage" INTEGER,
+    "rent" INTEGER,
+    "sellerName" TEXT,
+    "phone" TEXT NOT NULL,
+    "detail" TEXT,
+    "fromMeter" INTEGER,
+    "toMeter" INTEGER,
+    "room" INTEGER,
+    "fromBuildYear" INTEGER,
+    "toBuildYear" INTEGER,
+    "tag" TEXT[],
+    "submitedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "userId" TEXT NOT NULL,
+    "type" "PropertyType" NOT NULL,
+    "mainType" "MainType" NOT NULL,
+    "watchCount" INTEGER NOT NULL DEFAULT 0,
+
+    CONSTRAINT "House_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -106,6 +134,9 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE UNIQUE INDEX "User_phone_key" ON "User"("phone");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "House_id_key" ON "House"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Sale_id_key" ON "Sale"("id");
 
 -- CreateIndex
@@ -113,6 +144,9 @@ CREATE UNIQUE INDEX "Buyer_id_key" ON "Buyer"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Rent_id_key" ON "Rent"("id");
+
+-- AddForeignKey
+ALTER TABLE "House" ADD CONSTRAINT "House_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Sale" ADD CONSTRAINT "Sale_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
