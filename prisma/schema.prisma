@@ -13,7 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum MainType {
+enum CategoryType {
   Sale
   Buyer
   Asker
@@ -40,9 +40,6 @@ model User {
   phone        String?  @unique
   registerDate DateTime @default(now())
   token        String
-  Sale         Sale[]
-  Buyer        Buyer[]
-  Rent         Rent[]
   Liked        String[]
   House        House[]
 }
@@ -57,91 +54,17 @@ model House {
   sellerName    String?
   phone         String
   detail        String?
-  meterage        Int?
+  meterage      Int?
   fromMeter     Int?
   toMeter       Int?
   room          Int?
-  buildYear Int?
+  buildYear     Int?
   fromBuildYear Int?
   toBuildYear   Int?
   tag           String[]
   submitedAt    DateTime     @default(now())
   userId        String
   type          PropertyType
-  category      MainType
+  category      CategoryType
   watchCount    Int          @default(0)
-}
-
-model Sale {
-  id         String       @id @unique @default(uuid())
-  user       User         @relation(fields: [userId], references: [id])
-  title      String
-  price      Int?
-  sellerName String?
-  phone      String
-  address    String?
-  detail     String?
-  meterage   Int?
-  room       Int?
-  buildYear  Int?
-  floor      Int?
-  countFloor Int?
-  parking    Boolean?
-  elvator    Boolean?
-  warehouse  Boolean?
-  tag        String[]
-  submitedAt DateTime     @default(now())
-  userId     String
-  type       PropertyType
-  mainType   String       @default("Sale")
-  watchCount Int          @default(0)
-}
-
-model Buyer {
-  id            String         @id @unique @default(uuid())
-  user          User           @relation(fields: [userId], references: [id])
-  title         String
-  price         Int?
-  mortgage      Int?
-  rent          Int?
-  sellerName    String?
-  phone         String
-  detail        String?
-  fromMeter     Int?
-  toMeter       Int?
-  room          Int?
-  fromBuildYear Int?
-  toBuildYear   Int?
-  tag           String[]
-  submitedAt    DateTime       @default(now())
-  userId        String
-  type          PropertyType
-  mainType      String         @default("Buyer")
-  property      PropertyType[]
-  watchCount    Int            @default(0)
-}
-
-model Rent {
-  id         String       @id @unique @default(uuid())
-  user       User         @relation(fields: [userId], references: [id])
-  title      String
-  mortgage   Int?
-  rent       Int?
-  owner      String?
-  phone      String
-  address    String?
-  detail     String?
-  meterage   Int?
-  room       Int?
-  buildYear  Int?
-  floor      Int?
-  countFloor Int?
-  parking    Boolean?
-  elvator    Boolean?
-  tag        String[]
-  submitedAt DateTime     @default(now())
-  userId     String
-  type       PropertyType @default(Rent)
-  mainType   String       @default("Rent")
-  watchCount Int          @default(0)
 }
