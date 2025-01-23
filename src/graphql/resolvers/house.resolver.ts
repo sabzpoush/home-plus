@@ -1,6 +1,6 @@
 import {PrismaClient,User} from '@prisma/client'
 const prisma = new PrismaClient();
-import {userValidator} from '../../utils/auth/auth.util';
+import {userTokenValidator, userValidator} from '../../utils/auth/auth.util';
 import { houseFilter } from '../../utils/helper/filter';
 
 
@@ -33,15 +33,17 @@ export const houseMutation = {
         return updatedHouse;
     },
     filterHouseByParameters:async(_,{filter},context)=>{
+        const user:User = await userTokenValidator(context.req);
+
         const {
             title,
             room,
-            priceFrom = 0,
+            priceFrom,
             priceTo,
-            buildYearFrom = 0,
-            buildYearTo = 9999,
-            meterageFrom = 0,
-            meterageTo = 999999,
+            buildYearFrom,
+            buildYearTo,
+            meterageFrom,
+            meterageTo,
             category=["Rent","Asker","Buyer","Sale"],
             type=[
                 "Apartment",
@@ -52,16 +54,19 @@ export const houseMutation = {
                 "Eco",
             ],
         } = filter;
-
+        console.log(await filter);
         let house = await prisma.house.findMany({
             where:{
                 AND:[
+                    {...(user !== null && {userId:user.id})},
                     {category:{in:category}},
                     {...(room !== undefined && { room:{gte:room}})},
                     {...(priceFrom !== undefined &&{price:{gte:priceFrom}})},
                     {...(priceTo !== undefined &&{price:{lte:priceTo}})},
-                    {buildYear:{gte:buildYearFrom,lte:buildYearTo}},
-                    {meterage:{gte:meterageFrom,lte:meterageTo}},
+                    {...(buildYearFrom !== undefined && {buildYear:{gte:buildYearFrom}})},
+                    {...(buildYearTo !== undefined && {buildYear:{lte:buildYearTo}})},
+                    {...(meterageFrom !== undefined && {meterage:{gte:meterageFrom}})},
+                    {...(meterageTo !== undefined && {meterage:{lte:meterageTo}})},
                     {type:{in:type}},
                 ]
             }
@@ -78,62 +83,12 @@ export const houseMutation = {
 
         return house;
     },
-    selfHouseFilter:async(_,{filter},context)=>{
-        const user:User = await userValidator(context.req);
-        const {
-            title,
-            room,
-            priceFrom = 0,
-            priceTo,
-            buildYearFrom = 0,
-            buildYearTo = 9999,
-            meterageFrom = 0,
-            meterageTo = 999999,
-            category=["Rent","Asker","Buyer","Sale"],
-            type=[
-                "Apartment",
-                "Pilot",
-                "Basement",
-                "Land",
-                "Resident",
-                "Eco",
-                "DailyRent",
-            ],
-        } = filter;
-
-        let house = await prisma.house.findMany({
-            where:{
-                AND:[
-                    {userId:user.id},
-                    {category:{in:category}},
-                    {...(room !== undefined && { room:{lte:room}})},
-                    {...(priceFrom !== undefined &&{price:{gte:priceFrom}})},
-                    {...(priceTo !== undefined &&{price:{lte:priceTo}})},
-                    {buildYear:{gte:buildYearFrom,lte:buildYearTo}},
-                    {meterage:{gte:meterageFrom,lte:meterageTo}},
-                    {type:{in:type}},
-                ]
- 
-            }
-        });
-
-        if(house.length == 0) throw new Error('ملکی با این شرایط ثبت نکرده اید!');
-
-        if(title){
-            const regex = new RegExp(`^.*${title}.*$`);
-            house = house.filter((prop)=>{
-                return regex.test(prop.title);
-            });
-        }
-
-        return house;
-    },
-    singleHouse:async(_,{id})=>{
-        const house = await prisma.house.findUnique({where:{id}});
+    singleHouse:async(_,{houseId})=>{
+        const house = await prisma.house.findUnique({where:{id:houseId}});
         if(!house){
             throw new Error('آگهی فروش یافت نشد!');
         }else{
-            await prisma.house.update({where:{id},data:{watchCount:{increment:1}}});
+            await prisma.house.update({where:{id:houseId},data:{watchCount:{increment:1}}});
         }
 
         return house;
