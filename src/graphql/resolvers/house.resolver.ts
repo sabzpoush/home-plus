@@ -1,7 +1,7 @@
-import {PrismaClient,User,Sale} from '@prisma/client'
+import {PrismaClient,User} from '@prisma/client'
 const prisma = new PrismaClient();
 import {userValidator} from '../../utils/auth/auth.util';
-import { houseFilter, saleFilter } from '../../utils/helper/filter';
+import { houseFilter } from '../../utils/helper/filter';
 
 
 export const houseMutation = {
@@ -34,6 +34,7 @@ export const houseMutation = {
     },
     filterHouseByParameters:async(_,{filter},context)=>{
         const {
+            title,
             room,
             priceFrom = 0,
             priceTo,
@@ -48,12 +49,11 @@ export const houseMutation = {
                 "Basement",
                 "Land",
                 "Resident",
-                "Buyer",
-                "Rent"
+                "Eco",
             ],
         } = filter;
 
-        const house = await prisma.house.findMany({
+        let house = await prisma.house.findMany({
             where:{
                 AND:[
                     {category:{in:category}},
@@ -69,11 +69,19 @@ export const houseMutation = {
 
         if(house.length  == 0) throw new Error('ملکی مشابه نیاز های شما یافت نشد!');
 
+        if(title){
+            const regex = new RegExp(`^.*${title}.*$`);
+            house = house.filter((prop)=>{
+                return regex.test(prop.title);
+            });
+        }
+
         return house;
     },
     selfHouseFilter:async(_,{filter},context)=>{
         const user:User = await userValidator(context.req);
         const {
+            title,
             room,
             priceFrom = 0,
             priceTo,
@@ -93,7 +101,7 @@ export const houseMutation = {
             ],
         } = filter;
 
-        const house = await prisma.house.findMany({
+        let house = await prisma.house.findMany({
             where:{
                 AND:[
                     {userId:user.id},
@@ -109,7 +117,14 @@ export const houseMutation = {
             }
         });
 
-        if(house.length == 0) throw new Error('ملکی با این شرایط ثبت نکرده اید!')
+        if(house.length == 0) throw new Error('ملکی با این شرایط ثبت نکرده اید!');
+
+        if(title){
+            const regex = new RegExp(`^.*${title}.*$`);
+            house = house.filter((prop)=>{
+                return regex.test(prop.title);
+            });
+        }
 
         return house;
     },
@@ -141,6 +156,15 @@ export const houseMutation = {
         const filter = houseFilter(house);
         return filter;
     },
+    searchProperty:async(_,{title},context)=>{
+        const house = await prisma.house.findMany();
+        const regex = new RegExp(`^.*${title}.*$`);
+        const houses = house.filter((prop)=>{
+            return regex.test(prop.title);
+        });
+        
+        return houses;
+    },
 };
 
 export const houseQuery = {
@@ -157,5 +181,4 @@ export const houseQuery = {
 
         return house;
     },
-
 }

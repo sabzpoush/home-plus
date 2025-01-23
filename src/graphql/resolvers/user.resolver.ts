@@ -1,7 +1,8 @@
-import {PrismaClient, User} from '@prisma/client'
+import {House, PrismaClient, User} from '@prisma/client'
 const prisma = new PrismaClient();
 import {createToken} from '../../utils/auth/token.util';
 import bcrypt from 'bcrypt';
+import {hashPassword} from '../../utils/auth/hashPassword.util';
 import { userTokenValidator, userValidator, verifyUserToken } from '../../utils/auth/auth.util';
 import fs from 'fs';
 import path from 'path';
@@ -30,13 +31,12 @@ export const userResolver = {
         try{
             const {email}  = args;
             const token:string = createToken(email) as string;
-            const salt = bcrypt.genSaltSync(10);
-            const hashPassword = bcrypt.hashSync(args.password,salt);
+            const hashedPassword = hashPassword(args.password);
             const checkUser = await prisma.user.findUnique({where:{email}});
             if(checkUser){
                 throw new Error('این ایمیل قبلا ثبت شده!');
             }
-            const user = await prisma.user.create({data:{...args,password:hashPassword,token}});
+            const user = await prisma.user.create({data:{...args,password:hashedPassword,token}});
     
             if(!user){
                 throw new Error("در ثبت نام کاربر مشکلی بوجود آمد!");
@@ -48,14 +48,18 @@ export const userResolver = {
         }
     },
     editUser:async(_,args,context)=>{
-        const user:User = await userValidator(context.req);
+        try{
+            const user:User = await userValidator(context.req);
 
-        const editProfile:User = await prisma.user.update({where:{id:user.id},data:{...args}});
-        if(!editProfile){
-            throw new Error('در ویرایش کاربر مشکلی رخ داد!');
+            const editProfile:User = await prisma.user.update({where:{id:user.id},data:{...args}});
+            if(!editProfile){
+                throw new Error('در ویرایش کاربر مشکلی رخ داد!');
+            }
+    
+            return editProfile;
+        }catch(err){
+            throw new Error(err.toString());
         }
-
-        return editProfile;
     },
     uploadFile:async(_,{file},context)=>{
         //const user:User = await userValidator(context.req);
@@ -86,10 +90,7 @@ export const userResolver = {
     },
     addLikedProperty:async(_,{id},context)=>{
         const user:User = await userValidator(context.req);
-        const property =
-        await prisma.sale.findUnique({where:{id}}) ||
-        await prisma.rent.findUnique({where:{id}}) ||   
-        await prisma.buyer.findUnique({where:{id}});
+        const property = await prisma.house.findUnique({where:{id}});
 
         if(!property){
             throw new Error('ملکی با این شناسه موجود نیست!');
@@ -127,33 +128,32 @@ export const userResolver = {
 
 export const userQueryResolver = {
     userPropertySubmited:async(_,{},context)=>{
-        const user:User = await userValidator(context.req);
+        try{
+            const user:User = await userValidator(context.req);
 
-        const sales = await prisma.sale.findMany({where:{userId:user.id}});
-        const rents = await prisma.rent.findMany({where:{userId:user.id}});
-        const buyers = await prisma.buyer.findMany({where:{userId:user.id}});
-        
-        if(!sales || !rents || !buyers) throw new Error('بارگذاری اطلاعات شما با خطا مواجه شد!');
-
-        return {sales,rents,buyers};
+            const house = await prisma.house.findMany({where:{userId:user.id}});
+          
+            if(!house) throw new Error('بارگذاری اطلاعات شما با خطا مواجه شد!');
+            if(!house.length) throw new Error('بارگذاری اطلاعات شما با خطا مواجه شد!');
+    
+            return house;
+        }catch(err){
+            throw new Error(err.toString());
+        }
     }, 
     likeProperty:async(_,{},context)=>{
-        const user:User = await userValidator(context.req);
+        try{
+            const user:User = await userValidator(context.req);
 
-        // const properties =
-        // await prisma.sale.findMany({where:{id:{in:user.Liked}}}) ||
-        // await prisma.rent.findMany({where:{id:{in:user.Liked}}}) ||   
-        // await prisma.buyer.findMany({where:{id:{in:user.Liked}}});
-
-        const sales = await prisma.sale.findMany({where:{id:{in:user.Liked}}});
-        const rents = await prisma.rent.findMany({where:{id:{in:user.Liked}}});
-        const buyers = await prisma.buyer.findMany({where:{id:{in:user.Liked}}});
-
-
-        if(!sales.length && !rents.length && !buyers.length){
-            throw new Error('ملکی را هنوز به عنوان علاقه مندی اضافه نکرده اید!');
-        };
-
-        return {sales,rents,buyers};
+            const house = await prisma.house.findMany({where:{id:{in:user.Liked}}});
+    
+            if(!house.length){
+                throw new Error('ملکی را هنوز به عنوان علاقه مندی اضافه نکرده اید!');
+            };
+    
+            return house;
+        }catch(err){
+            throw new Error(err.toString());
+        }
     }
 }
