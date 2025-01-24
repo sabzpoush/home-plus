@@ -1,7 +1,7 @@
 import express,{Request,Response,NextFunction,Router} from 'express';
 import {ApolloServer} from 'apollo-server-express';
 import {resolvers,typeDefs} from './graphql/index.resolvers';
-import { userValidator } from './utils/auth/auth.util';
+
 
 const app = express();
 
