@@ -29,8 +29,8 @@ export const HouseType = `#graphql
     }
 
     type OrderHouse{
-        newsetBuyer:[House],
-        oldestBuyer:[House],
+        newestHouse:[House],
+        oldestHouse:[House],
         highToLowBuyers:[House],
         lowToHighBuyers:[House],
         highToLowAskerRent:[House],
@@ -43,5 +43,14 @@ export const HouseType = `#graphql
         lowToHighRent:[House]
         highToLowSales:[House]
         lowToHighSales:[House]
+    }
+
+    type FilterHouseByCategory{
+        newestHouse:[House],
+        oldestHouse:[House],
+        highToLowHouse:[House],
+        lowToHighHouse:[House],
+        highMortgage:[House],
+        lowMortgage:[House],
     }
 `;
