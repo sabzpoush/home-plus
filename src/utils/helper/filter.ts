@@ -62,36 +62,41 @@ export function filterHouseByCategory(house:House[],category:string){
     switch(category){
         case "Buyer":
             highToLowHouse = [...house]
-                .filter((sale)=> sale.category.toString() == category.toString())
+               // .filter((sale)=> sale.category.toString() == category.toString())
                 .sort((s1, s2) => +s2.price - +s1.price);
             lowToHighHouse = [...house].reverse();
         case "Asker":
             // Sort Rent
             highToLowHouse = [...house]
-                .filter((sale)=> sale.category.toString() == category.toString())
+               // .filter((sale)=> sale.category.toString() == category.toString())
                 .sort((s1, s2) => +s2.rent - +s1.rent);
             lowToHighHouse = [...house].reverse();
             // Sort Mortgage
             highMortgage = [...house]
-                .filter((sale)=> sale.category.toString() == category.toString())
+                //.filter((sale)=> sale.category.toString() == category.toString())
                 .sort((s1, s2) => +s2.mortgage - +s1.mortgage);
             lowMortgage = [...house].reverse();
         case "Rent":
             // Sort Rent
             highToLowHouse = [...house]
-                .filter((sale)=> sale.category.toString() == category.toString())
+                //.filter((sale)=> sale.category.toString() == category.toString())
                 .sort((s1, s2) => +s2.rent - +s1.rent);
             lowToHighHouse = [...house].reverse();
             // Sort Mortgage
             highMortgage = [...house]
-                .filter((sale)=> sale.category.toString() == category.toString())
+                //.filter((sale)=> sale.category.toString() == category.toString())
                 .sort((s1, s2) => +s2.mortgage - +s1.mortgage);
             lowMortgage = [...house].reverse();
         case "Sale":
             highToLowHouse = [...house]
-                .filter((sale)=> sale.category.toString() == category.toString())
+                //.filter((sale)=> sale.category.toString() == category.toString())
                 .sort((s1, s2) => +s2.price - +s1.price);
             lowToHighHouse = [...house].reverse();
+    }
+
+    let isMortgageExist:boolean = false;
+    if(highMortgage.length && lowMortgage.length){
+        isMortgageExist = true;
     }
 
     return {
@@ -101,5 +106,6 @@ export function filterHouseByCategory(house:House[],category:string){
         lowToHighHouse,
         highMortgage,
         lowMortgage,
+        isMortgageExist,
     };
 };
