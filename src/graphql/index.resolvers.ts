@@ -1,8 +1,8 @@
 import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json';
 import {user,auth} from './types/user.type';
 import {userQueryResolver, userResolver} from './resolvers/user.resolver';
-import {query} from './queries/query'
-import { mutation } from './mutations/mutation';
+import {query} from './routes/query'
+import { mutation } from './routes/mutation';
 import {enumTypes} from './types/enum/enum.type';
 import {editUser, houseInput} from './types/input/input.type';
 import {unionTypes} from './types/union/union.type';

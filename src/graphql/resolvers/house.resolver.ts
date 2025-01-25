@@ -112,7 +112,8 @@ export const houseMutation = {
         return filter;
     },
     searchProperty:async(_,{title},context)=>{
-        const house = await prisma.house.findMany();
+        const user:User = await userTokenValidator(context.req);
+        const house = await prisma.house.findMany({where:{...(user !== null && {userId:user.id})}});
         const regex = new RegExp(`^.*${title}.*$`);
         const houses = house.filter((prop)=>{
             return regex.test(prop.title);
