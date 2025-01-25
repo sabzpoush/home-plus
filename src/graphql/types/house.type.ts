@@ -52,5 +52,6 @@ export const HouseType = `#graphql
         lowToHighHouse:[House],
         highMortgage:[House],
         lowMortgage:[House],
+        isMortgageExist:Boolean,
     }
 `;
