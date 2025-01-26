@@ -21,7 +21,7 @@ export const userResolver = {
                 throw new Error('نام کاربری یا رمز عبور اشتباه است!')
             }
             const token:string = createToken(email) as string;
-            const changeUserToken = await prisma.user.update({where:{id:user.id},data:{token}});
+            const changeUserToken = await prisma.user.update({where:{id:user.id},data:{token},include:{House:true}});
             return {token,user:changeUserToken};
         }catch(err){
             throw new Error(`خطای ناشناخته! ${err}`);
