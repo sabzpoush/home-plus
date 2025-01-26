@@ -1,7 +1,7 @@
 import {PrismaClient,User} from '@prisma/client'
 const prisma = new PrismaClient();
 import {userTokenValidator, userValidator} from '../../utils/auth/auth.util';
-import { houseFilter } from '../../utils/helper/filter';
+import { filterHouseByCategory, houseFilter } from '../../utils/helper/filter';
 
 
 export const houseMutation = {
@@ -101,15 +101,20 @@ export const houseMutation = {
         return `ملک ${house.title} با موفقیت حذف شد!`;
     },
     orderHouse:async(_,{category,type},context)=>{
-        let house = await prisma.house.findMany({
+        let newestHouse = (await prisma.house.findMany({
             where:{AND:[
                 {...(category !== undefined && {category})},
                 {...(type !== undefined && {type})}
             ]}
-        });
+        })).sort((house1,house2)=> +house2.submitedAt - +house1.submitedAt);
+        const oldestHouse = [...newestHouse].reverse();
 
-        const filter = houseFilter(house);
-        return filter;
+        const filter = filterHouseByCategory(newestHouse,category);
+        return {
+            newestHouse,
+            oldestHouse,
+            ...filter,
+        };
     },
     searchProperty:async(_,{title},context)=>{
         const user:User = await userTokenValidator(context.req);
