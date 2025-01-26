@@ -19,7 +19,7 @@ export const mutation = `#graphql
         filterHouseByParameters(filter:HouseFilter):[House]
         singleHouse(houseId:ID!):House
         deleteHouse(houseId:ID!):String!
-        orderHouse(category:CategoryType,type:PropertyType):OrderHouse
+        orderHouse(category:CategoryType,type:PropertyType):FilterHouseByCategory
         
     }
 `;
