@@ -45,26 +45,29 @@ model User {
 }
 
 model House {
-  id            String       @id @unique @default(uuid())
-  user          User         @relation(fields: [userId], references: [id])
-  title         String
-  price         Int?
-  mortgage      Int?
-  rent          Int?
-  sellerName    String?
-  phone         String
-  detail        String?
-  meterage      Int?
-  fromMeter     Int?
-  toMeter       Int?
-  room          Int?
-  buildYear     Int?
-  fromBuildYear Int?
-  toBuildYear   Int?
-  tag           String[]
-  submitedAt    DateTime     @default(now())
-  userId        String
-  type          PropertyType
-  category      CategoryType
-  watchCount    Int          @default(0)
+  id              String       @id @unique @default(uuid())
+  user            User         @relation(fields: [userId], references: [id])
+  title           String
+  price           Int?
+  mortgage        Int?
+  rent            Int?
+  sellerName      String?
+  phone           String
+  detail          String?
+  meterage        Int?
+  fromMeter       Int?
+  toMeter         Int?
+  room            Int?
+  buildYear       Int?
+  fromBuildYear   Int?
+  toBuildYear     Int?
+  tag             String[]
+  submitedAt      DateTime     @default(now())
+  userId          String
+  type            PropertyType
+  category        CategoryType
+  watchCount      Int          @default(0)
+  cardImgUrl      String?
+  firstImgUrl     String?
+  otherContentUrl String[]
 }
