@@ -63,18 +63,51 @@ export const houseValidator = joi.object({
 
 
 export const houseFilterValidator = joi.object({
+    title:joi.string().optional(),
+    type: joi.string().valid('Eco','Land','Apartment','Vila','Pilot','Basement'),
+    categoryType: joi.string().valid('Asker','Buyer','Rent','Sale'),
     priceFrom:joi.number(),
-    priceTo:joi.number(),
+    priceTo:joi.number().when('priceFrom',{
+        is:joi.exist(),
+        then:joi.required(),
+        otherwise: joi.forbidden(),
+    }),
+    mortgageFrom:joi.number(),
+    mortgageTo:joi.number().when('mortgageFrom',{
+        is:joi.exist(),
+        then:joi.required(),
+        otherwise: joi.forbidden(),
+    }),
+    rentFrom:joi.number(),
+    rentTo:joi.number().when('rentFrom',{
+        is:joi.exist(),
+        then:joi.required(),
+        otherwise: joi.forbidden(),
+    }),
     buildYearFrom:joi.number(),
-    buildYearTo:joi.number(),
+    buildYearTo:joi.number().when('buildYearFrom',{
+        is:joi.exist(),
+        then:joi.required(),
+        otherwise: joi.forbidden(),
+    }),
     meterageFrom:joi.number(),
-    metarageTo:joi.number(),
-   // type,
+    metarageTo:joi.number().when('meterageFrom',{
+        is:joi.exist(),
+        then:joi.required(),
+        otherwise: joi.forbidden(),
+    }),
     room:joi.number(),
 }).custom((value, helpers) => {
     if (value.priceFrom > value.priceTo) {
         return helpers.message({message:'شروع قیمت نمی تواند از سقف قیمت کمتر باشد!'});
-      }
+    }
+    if (value.rentFrom > value.rentTo) {
+        return helpers.message({message:'شروع اجار نمی تواند از سقف اجار کمتر باشد!'});
+    }
+    if (value.mortgageFrom > value.mortgageTo) {
+        return helpers.message({message:'شروع رهن نمی تواند از سقف رهن کمتر باشد!'});
+    }
+
     if (value.meterageFrom > value.metarageTo) {
       return helpers.message({message:'متر اولیه نمی تواند کمتر از متر ثانویه باشد!'});
     }
