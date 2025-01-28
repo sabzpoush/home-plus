@@ -7,14 +7,15 @@ export const editUser = `#graphql
         title: String
         phone: String
         registerDate: String!
-        token: String
-    }
+   }
 `;
 
 export const houseInput = `#graphql
     input HouseSubmit {
         title:String!
         price:Int
+        rent:Int
+        mortagage:Int
         sellerName:String
         phone:String!
         address:String
