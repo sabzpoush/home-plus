@@ -2,28 +2,34 @@ import joi from 'joi';
 
 export const houseValidator = joi.object({
     title: joi.string()
-        .required()
-        .min(3)
-        .max(25),
+    .required()
+    .min(3)
+    .max(25)
+    .messages({
+        'string.min': 'عنوان ملک نمی تواند کمتر از سه حرف باشد!',
+        'string.max': 'عنوان ملک نمی تواند بیشتر از ۲۵ حرف باشد!',
+        'any.required': 'عنوان ملک الزامی است!',
+    }),
     owner: joi.string()
         .min(3)
-        .max(40),
-    mortagage: joi.number().min(0),
+        .max(40)
+        .message('نام مالک یا فرشنده نمی تواند کمتر از سه حرف باشد!'),
+    mortagage: joi.number().min(0).message('لطفا نرخ رهن را صحیح وارد کنید!'),
     rent:joi.number().min(0),
     price:joi.number(),
     phone:joi.string()
         .length(11)
         .allow(joi.string().length(8))
-        .required(),
+        .required().message('شماره تلفن وارد شده صحیح نیست!'),
     address: joi.string(),
     detail: joi.string().optional(),
-    fromMeter:joi.number().min(0).optional(),
+    fromMeter:joi.number().min(0).optional().message('کمتر از صفر نمی توانید وارد کنید!'),
     toMeter: joi.number().when('fromMeter',{
         is: joi.exist(),
         then: joi.required(),
         otherwise: joi.forbidden(),
-    }),
-    room: joi.number().min(0).max(32),
+    }).message('شروع متراژ را وارد نکرده اید!'),
+    room: joi.number().min(0).max(32).optional().message('بیش از 32 اتاق نمی توانید در نظر بگیرید!'),
     fromBuildYear: joi.number()
         .min(1300)
         .max(1500)
@@ -36,7 +42,7 @@ export const houseValidator = joi.object({
             is: joi.exist(),
             then: joi.required(),
             otherwise: joi.forbidden(), // Disallow `fieldB` if `fieldA` does not exist
-          }),
+          }).message('شروع سال ساخت را وارد نکرده اید!'),
     floor: joi.number().min(0).max(32).optional(),
     countFloor: joi.number().min(0).max(32).optional(),
     elvator:joi.boolean().optional(),
@@ -64,38 +70,38 @@ export const houseValidator = joi.object({
 
 export const houseFilterValidator = joi.object({
     title:joi.string().optional(),
-    type: joi.string().valid('Eco','Land','Apartment','Vila','Pilot','Basement'),
-    categoryType: joi.string().valid('Asker','Buyer','Rent','Sale'),
+    type: joi.string().valid('Eco','Land','Apartment','Vila','Pilot','Basement').optional(),
+    categoryType: joi.string().valid('Asker','Buyer','Rent','Sale').optional(),
     priceFrom:joi.number(),
     priceTo:joi.number().when('priceFrom',{
         is:joi.exist(),
         then:joi.required(),
         otherwise: joi.forbidden(),
-    }),
+    }).message('شروع قیمت را وارد نکرده اید!'),
     mortgageFrom:joi.number(),
     mortgageTo:joi.number().when('mortgageFrom',{
         is:joi.exist(),
         then:joi.required(),
         otherwise: joi.forbidden(),
-    }),
+    }).message('شروع قیمت رهن را وارد نکرده اید!'),
     rentFrom:joi.number(),
     rentTo:joi.number().when('rentFrom',{
         is:joi.exist(),
         then:joi.required(),
         otherwise: joi.forbidden(),
-    }),
+    }).message('شروع قیمت اجاره را وارد نکرده اید!'),
     buildYearFrom:joi.number(),
     buildYearTo:joi.number().when('buildYearFrom',{
         is:joi.exist(),
         then:joi.required(),
         otherwise: joi.forbidden(),
-    }),
+    }).message('شروع سال را وارد نکرده اید!'),
     meterageFrom:joi.number(),
     metarageTo:joi.number().when('meterageFrom',{
         is:joi.exist(),
         then:joi.required(),
         otherwise: joi.forbidden(),
-    }),
+    }).message('شروع متراژ را وارد نکرده اید!'),
     room:joi.number(),
 }).custom((value, helpers) => {
     if (value.priceFrom > value.priceTo) {
