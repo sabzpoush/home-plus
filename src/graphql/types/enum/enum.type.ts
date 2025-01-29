@@ -11,7 +11,7 @@ export const enumTypes = `#graphql
         Pilot
         Basement
         Land
-        Resident
+        Vila
         Eco
     }
 `;
