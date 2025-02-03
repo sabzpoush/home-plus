@@ -27,13 +27,13 @@ enum PropertyType {
   Pilot
   Basement
   Land
-  Resident
+  Vila
   Rent
 }
 
 model User {
   id           String   @id @unique @default(uuid())
-  email        String?  @unique
+  email        String   @unique
   password     String?
   name         String?
   title        String?
@@ -52,7 +52,8 @@ model House {
   mortgage        Int?
   rent            Int?
   sellerName      String?
-  phone           String
+  phone           String?
+  address         String?
   detail          String?
   meterage        Int?
   fromMeter       Int?
@@ -62,6 +63,11 @@ model House {
   fromBuildYear   Int?
   toBuildYear     Int?
   tag             String[]
+  warehouse       Boolean?
+  parking         Boolean?
+  elevator        Boolean?
+  floor           Int?
+  countFloor      Int?
   submitedAt      DateTime     @default(now())
   userId          String
   type            PropertyType

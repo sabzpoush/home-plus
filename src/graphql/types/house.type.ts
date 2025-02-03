@@ -6,7 +6,7 @@ export const HouseType = `#graphql
         mortgage:Int
         rent:Int
         sellerName:String
-        phone:String!
+        phone:String
         address:String
         detail:String
         meterage:Int
@@ -19,7 +19,7 @@ export const HouseType = `#graphql
         floor:Int
         countFloor:Int
         parking:Boolean
-        elvator:Boolean
+        elevator:Boolean
         warehouse:Boolean
         tag:[String]
         submitedAt:String!

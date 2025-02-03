@@ -2,7 +2,6 @@ export const user = `#graphql
     type User{
         id:String!
         email:String!
-        password:String!
         name:String!
         title:String!
         phone:String

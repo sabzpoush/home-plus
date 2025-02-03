@@ -2,7 +2,6 @@ export const editUser = `#graphql
     input UserEdit{
         id: String!
         email: String!
-        password: String
         name: String
         title: String
         phone: String
@@ -17,7 +16,7 @@ export const houseInput = `#graphql
         rent:Int
         mortagage:Int
         sellerName:String
-        phone:String!
+        phone:String
         address:String
         detail:String
         meterage:Int
@@ -30,7 +29,7 @@ export const houseInput = `#graphql
         floor:Int
         countFloor:Int
         parking:Boolean
-        elvator:Boolean
+        elevator:Boolean
         warehouse:Boolean
         tag:[String]
         category:CategoryType!
@@ -56,7 +55,7 @@ export const houseInput = `#graphql
         floor:Int
         countFloor:Int
         parking:Boolean
-        elvator:Boolean
+        elevator:Boolean
         warehouse:Boolean
         tag:[String]
         property:PropertyType
