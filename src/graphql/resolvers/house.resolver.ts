@@ -2,13 +2,14 @@ import {PrismaClient,User} from '@prisma/client'
 const prisma = new PrismaClient();
 import {userTokenValidator, userValidator} from '../../utils/auth/auth.util';
 import { filterHouseByCategory, houseFilter } from '../../utils/helper/filter';
-
+import {houseValidator,houseFilterValidator} from '../../utils/validator/house.validator';
+import {ErrorValidation} from '../../utils/helper/error.handler';
 
 export const houseMutation = {
     submitHouse:async(_,{house:args},context)=>{
         const user:User = await userValidator(context.req);
-        
-        const house = await prisma.house.create({data:{userId:user.id,...args}});
+        const houesValidatedValue = await ErrorValidation(houseValidator,args);
+        const house = await prisma.house.create({data:{userId:user.id,...houesValidatedValue as any}});
         if(!house){
             throw new Error("در ثبت این اگهی مشکلی رخ داد!");
         }
@@ -34,7 +35,7 @@ export const houseMutation = {
     },
     filterHouseByParameters:async(_,{filter},context)=>{
         const user:User = await userTokenValidator(context.req);
-        console.log(user);
+        const filterValidatedValue = await ErrorValidation(houseFilterValidator,filter);
         const {
             title,
             room,
@@ -50,10 +51,10 @@ export const houseMutation = {
                 "Pilot",
                 "Basement",
                 "Land",
-                "Resident",
+                "Vila",
                 "Eco",
             ],
-        } = filter;
+        } = filterValidatedValue as any;
  
         let house = await prisma.house.findMany({
             where:{
