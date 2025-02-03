@@ -2,13 +2,13 @@ import {PrismaClient,User} from '@prisma/client'
 const prisma = new PrismaClient();
 import {userTokenValidator, userValidator} from '../../utils/auth/auth.util';
 import { filterHouseByCategory, houseFilter } from '../../utils/helper/filter';
-import {houseValidator,houseFilterValidator} from '../../utils/validator/house.validator';
+import {houseSubmitValidator,houseEditValidator,houseFilterValidator, validateID, houseOrderValidator} from '../../utils/validator/house.validator';
 import {ErrorValidation} from '../../utils/helper/error.handler';
 
 export const houseMutation = {
     submitHouse:async(_,{house:args},context)=>{
         const user:User = await userValidator(context.req);
-        const houesValidatedValue = await ErrorValidation(houseValidator,args);
+        const houesValidatedValue = await ErrorValidation(houseSubmitValidator,args);
         const house = await prisma.house.create({data:{userId:user.id,...houesValidatedValue as any}});
         if(!house){
             throw new Error("در ثبت این اگهی مشکلی رخ داد!");
@@ -18,7 +18,7 @@ export const houseMutation = {
     },
     editHouse:async(_,{houseId,house:args},context)=>{
         const user:User = await userValidator(context.req);
-
+        await ErrorValidation(houseEditValidator,{houseId,...args});
         const house = await prisma.house.update({
             where:{id:houseId,userId:user.id},
             data:{...args}
@@ -85,6 +85,7 @@ export const houseMutation = {
         return house;
     },
     singleHouse:async(_,{houseId})=>{
+        await ErrorValidation(validateID,{id:houseId});
         const house = await prisma.house.findUnique({where:{id:houseId}});
         if(!house){
             throw new Error('آگهی فروش یافت نشد!');
@@ -94,14 +95,16 @@ export const houseMutation = {
 
         return house;
     },
-    deleteHouse:async(_,{id},context)=>{
+    deleteHouse:async(_,{id: houseId},context)=>{
         const user:User = await userValidator(context.req);
+        await ErrorValidation(validateID,{id: houseId});
 
-        const house = await prisma.house.delete({where:{id,userId:user.id}});
+        const house = await prisma.house.delete({where:{id: houseId,userId:user.id}});
         if(!house) throw new Error('حذف ملک با خطا مواجه شد!');
         return `ملک ${house.title} با موفقیت حذف شد!`;
     },
     orderHouse:async(_,{category,type},context)=>{
+        await ErrorValidation(houseOrderValidator,{category,type})
         let newestHouse = (await prisma.house.findMany({
             where:{AND:[
                 {...(category !== undefined && {category})},
@@ -133,13 +136,12 @@ export const houseQuery = {
     allHouse:async()=>{
         const house = await prisma.house.findMany();
         if(house.length == 0) throw new Error('ملکی در سایت ثبت نشده است!');
+        
         return house;
     },
     topViewedHouse:async()=>{
         const house = (await prisma.house.findMany({})).sort((a,b)=>a.watchCount - b.watchCount);
-        if(house.length == 0){
-            throw new Error('ملکی در سایت موجود نیست');
-        }
+        if(house.length == 0) throw new Error('ملکی در سایت موجود نیست');
 
         return house;
     },
