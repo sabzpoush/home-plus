@@ -155,7 +155,7 @@ export const houseValidator = joi.object({
             'any.only': 'نوع ملک باید یکی از مقادیر معتبر باشد!',
             'any.required': 'نوع ملک الزامی است!',
         }),
-    categoryType: joi.string()
+    category: joi.string()
         .valid('Asker', 'Buyer', 'Rent', 'Sale')
         .required()
         .messages({
@@ -190,7 +190,7 @@ export const houseFilterValidator = joi.object({
             'string.base': 'نوع ملک باید یک رشته متن باشد!',
             'any.only': 'نوع ملک باید یکی از مقادیر معتبر باشد!',
         }),
-    categoryType: joi.string()
+    category: joi.string()
         .valid('Asker', 'Buyer', 'Rent', 'Sale')
         .optional()
         .messages({
