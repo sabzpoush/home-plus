@@ -6,8 +6,8 @@ import {hashPassword} from '../../utils/auth/hashPassword.util';
 import { userTokenValidator, userValidator, verifyUserToken } from '../../utils/auth/auth.util';
 import fs from 'fs';
 import path from 'path';
-import { ErrorValidation } from 'src/utils/helper/error.handler';
-import { validateID } from 'src/utils/validator/house.validator';
+import { ErrorValidation } from '../../utils/helper/error.handler';
+import { validateID } from '../../utils/validator/house.validator';
 
 
 export const userResolver = {
@@ -161,7 +161,7 @@ export const userQueryResolver = {
     
             return house;
         }catch(err){
-            throw new Error(err.toString());
+            throw new Error('یافتن ملک های ثبت شده شما با خطا مواجه شد!');
         }
     }, 
     likeProperty:async(_,{},context)=>{
@@ -176,7 +176,7 @@ export const userQueryResolver = {
     
             return house;
         }catch(err){
-            throw new Error(err.toString());
+            throw new Error('یافتن علاقه مندی های شما با خطا مواجه شد!');
         }
     }
 }
