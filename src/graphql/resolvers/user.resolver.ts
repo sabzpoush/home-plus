@@ -6,6 +6,8 @@ import {hashPassword} from '../../utils/auth/hashPassword.util';
 import { userTokenValidator, userValidator, verifyUserToken } from '../../utils/auth/auth.util';
 import fs from 'fs';
 import path from 'path';
+import { ErrorValidation } from 'src/utils/helper/error.handler';
+import { validateID } from 'src/utils/validator/house.validator';
 
 
 export const userResolver = {
@@ -62,66 +64,87 @@ export const userResolver = {
         }
     },
     uploadFile:async(_,{file},context)=>{
-        //const user:User = await userValidator(context.req);
-        const { createReadStream, filename, mimetype, encoding } = await file;
+        try{
+            //const user:User = await userValidator(context.req);
+            const { createReadStream, filename, mimetype, encoding } = await file;
 
-        // Define upload directory
-        const uploadDir = path.join(__dirname ,'../', 'uploads');
+            // Define upload directory
+            const uploadDir = path.join(__dirname ,'../', 'uploads');
   
-        // Ensure the directory exists
-        if (!fs.existsSync(uploadDir)) {
-          fs.mkdirSync(uploadDir);
+            // Ensure the directory exists
+            if (!fs.existsSync(uploadDir)) {
+              fs.mkdirSync(uploadDir);
+            }
+        
+            // Save the file to the server
+            const filePath = path.join(uploadDir, filename);
+            const stream = createReadStream();
+            await new Promise((resolve, reject) => {
+              const writeStream = fs.createWriteStream(filePath);
+              stream.pipe(writeStream);
+              writeStream.on('finish', resolve);
+              writeStream.on('error', (error) => {
+                fs.unlinkSync(filePath);
+                reject(error);
+              });
+            });
+        
+            return { filename, mimetype, encoding };
+        }catch(err){
+            throw new Error('باگذاری عکس با خطا مواجه شد!');
         }
-  
-        // Save the file to the server
-        const filePath = path.join(uploadDir, filename);
-        const stream = createReadStream();
-        await new Promise((resolve, reject) => {
-          const writeStream = fs.createWriteStream(filePath);
-          stream.pipe(writeStream);
-          writeStream.on('finish', resolve);
-          writeStream.on('error', (error) => {
-            fs.unlinkSync(filePath);
-            reject(error);
-          });
-        });
-  
-        return { filename, mimetype, encoding };
     },
     addLikedProperty:async(_,{id},context)=>{
-        const user:User = await userValidator(context.req);
-        const property = await prisma.house.findUnique({where:{id}});
-
-        if(!property){
-            throw new Error('ملکی با این شناسه موجود نیست!');
+        try{
+            const user:User = await userValidator(context.req);
+            await ErrorValidation(validateID,{id});
+    
+            const property = await prisma.house.findUnique({where:{id}});
+        
+            if(!property){
+                throw new Error('ملکی با این شناسه موجود نیست!');
+            }
+            const userLiked:string[] = user.Liked;
+            const existProp = userLiked.find((like)=> like == id);
+            if(existProp) throw new Error('این ملک قبلا به علاقه مندی ها افزوده شده!');
+            userLiked.push(property.id);
+            const addLikePropToUser = await prisma.user.update({
+                where:{id:user.id},
+                data:{Liked:userLiked}
+            });
+            if(!addLikePropToUser){
+                throw new Error('در افزودن ملک به علاقه مندی ها مشکلی رخ داد!');
+            }
+            return {message:`ملک ${property.title} به علاقه مندی ها افزوده شد!`};
+        }catch(err){
+            throw new Error('اضافه کردن ملک به علاقه مندی با خطا مواجه شد!');
         }
-        const userLiked:string[] = user.Liked;
-        const existProp = userLiked.find((like)=> like == id);
-        if(existProp) throw new Error('این ملک قبلا به علاقه مندی ها افزوده شده!');
-        userLiked.push(property.id);
-        const addLikePropToUser = await prisma.user.update({where:{id:user.id},data:{Liked:userLiked}});
-        if(!addLikePropToUser){
-            throw new Error('در افزودن ملک به علاقه مندی ها مشکلی رخ داد!');
-        }
-        return {message:`ملک ${property.title} به علاقه مندی ها افزوده شد!`};
     },
     removeLikedProperty:async(_,{id},context)=>{
-        const user:User = await userValidator(context.req);
-
-        const userLiked:string[] = user.Liked;
-        const updatedProp = userLiked.filter((like)=> like != id);
-
-        const removeLikeProp = await prisma.user.update({where:{id:user.id},data:{Liked:updatedProp}});
-        if(!removeLikeProp){
-            throw new Error('در حذف ملک از علاقه مندی مشکلی رخ داد!');
+        try{
+            const user:User = await userValidator(context.req);
+            await ErrorValidation(validateID,{id});
+            const userLiked:string[] = user.Liked;
+            const updatedProp = userLiked.filter((like)=> like != id);
+    
+            const removeLikeProp = await prisma.user.update({where:{id:user.id},data:{Liked:updatedProp}});
+            if(!removeLikeProp){
+                throw new Error('در حذف ملک از علاقه مندی مشکلی رخ داد!');
+            }
+            return {message:'ملک انتخابی از علاقه مندی ها حذف گردید!'};
+        }catch(err){
+            throw new Error('حذف ملک از علاقه مندی با خطا مواجه شد!');
         }
-        return {message:'ملک انتخابی از علاقه مندی ها حذف گردید!'};
     },
     checkUserToken:async(_,{},context)=>{
-        const tokenStat = await verifyUserToken(context.req);
-        const userResult = await userTokenValidator(context.req);
-        const user = JSON.stringify(userResult);
-        return {user,tokenStat};
+        try{
+            const tokenStat = await verifyUserToken(context.req);
+            const userResult = await userTokenValidator(context.req);
+            const user = JSON.stringify(userResult);
+            return {user,tokenStat};
+        }catch(err){
+            throw new Error('احراز کاربر با خطا مواجه شد!')
+        }
     },
 };
 
