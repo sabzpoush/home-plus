@@ -39,7 +39,7 @@ model User {
   title        String?
   phone        String?  @unique
   registerDate DateTime @default(now())
-  token        String
+  token        String   @unique
   Liked        String[]
   House        House[]
 }
