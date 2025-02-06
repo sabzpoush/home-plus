@@ -12,7 +12,7 @@ export const houseSubmitValidator = joi.object({
             'string.max': 'عنوان ملک نمی تواند بیشتر از ۲۵ حرف باشد!',
             'any.required': 'عنوان ملک الزامی است!',
         }),
-    owner: joi.string()
+    sellerName: joi.string()
         .min(3)
         .max(40)
         .messages({
@@ -54,6 +54,13 @@ export const houseSubmitValidator = joi.object({
         .messages({
             'string.base': 'جزئیات باید یک رشته متن باشد!',
         }),
+    meterage:joi.number()
+    .min(0)
+    .optional()
+    .messages({
+        'number.base': 'متراژ اولیه باید یک عدد باشد!',
+        'number.min': 'متراژ اولیه نمی تواند کمتر از صفر باشد!',
+    }),
     fromMeter: joi.number()
         .min(0)
         .optional()
@@ -79,6 +86,17 @@ export const houseSubmitValidator = joi.object({
             'number.base': 'تعداد اتاق باید یک عدد باشد!',
             'number.min': 'تعداد اتاق نمی تواند کمتر از صفر باشد!',
             'number.max': 'تعداد اتاق نمی تواند بیشتر از ۳۲ باشد!',
+        }),
+    buildYear: joi.number()
+        .min(1300)
+        .max(1500)
+        // .allow(joi.number().min(1972).max(2040))
+        .optional()
+        .messages({
+            'number.base': 'سال ساخت ملک باید یک عدد باشد!',
+            'number.min': 'سال ساخت ملک نمی تواند کمتر از ۱۳۰۰ باشد!',
+            'number.max': 'سال ساخت ملک نمی تواند بیشتر از ۱۵۰۰ باشد!',
+            // 'any.only': 'سال ساخت ملک باید بین ۱۹۷۲ و ۲۰۴۰ باشد!',
         }),
     fromBuildYear: joi.number()
         .min(1300)
@@ -125,7 +143,7 @@ export const houseSubmitValidator = joi.object({
             'number.min': 'تعداد طبقات نمی تواند کمتر از صفر باشد!',
             'number.max': 'تعداد طبقات نمی تواند بیشتر از ۳۲ باشد!',
         }),
-    elvator: joi.boolean()
+    elevator: joi.boolean()
         .optional()
         .messages({
             'boolean.base': 'آسانسور باید یک مقدار بولین باشد!',

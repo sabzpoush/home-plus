@@ -7,17 +7,17 @@ import {ErrorValidation} from '../../utils/helper/error.handler';
 
 export const houseMutation = {
     submitHouse:async(_,{house:args},context)=>{
-        try{
+       try{
             const user:User = await userValidator(context.req);
-            const houesValidatedValue = await ErrorValidation(houseSubmitValidator,args);
-            const house = await prisma.house.create({data:{userId:user.id,...houesValidatedValue as any}});
+            await ErrorValidation(houseSubmitValidator,args);
+            const house = await prisma.house.create({data:{userId:user.id,...args}});
             if(!house){
                 throw new Error("در ثبت این اگهی مشکلی رخ داد!");
             }
     
             return house;
         }catch(err){
-            throw new Error('ثبت اگهی با خطا مواجه شد!');
+            throw new Error(err);
         }
     },
     editHouse:async(_,{houseId,house:args},context)=>{
