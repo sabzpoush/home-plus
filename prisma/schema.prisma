@@ -27,7 +27,7 @@ enum PropertyType {
   Pilot
   Basement
   Land
-  Vila
+  Villa
   Rent
 }
 
