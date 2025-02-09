@@ -60,7 +60,7 @@ export const houseMutation = {
                     "Pilot",
                     "Basement",
                     "Land",
-                    "Vila",
+                    "Villa",
                     "Eco",
                 ],
             } = filterValidatedValue as any;

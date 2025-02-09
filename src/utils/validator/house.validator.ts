@@ -166,7 +166,7 @@ export const houseSubmitValidator = joi.object({
             'string.max': 'هر تگ نمی تواند بیشتر از ۲۴ حرف باشد!',
         }),
     type: joi.string()
-        .valid('Eco', 'Land', 'Apartment', 'Vila', 'Pilot', 'Basement')
+        .valid('Eco', 'Land', 'Apartment', 'Villa', 'Pilot', 'Basement')
         .required()
         .messages({
             'string.base': 'نوع ملک باید یک رشته متن باشد!',
@@ -202,7 +202,7 @@ export const houseFilterValidator = joi.object({
             'string.base': 'عنوان باید یک رشته متن باشد!',
         }),
     type: joi.string()
-        .valid('Eco', 'Land', 'Apartment', 'Vila', 'Pilot', 'Basement')
+        .valid('Eco', 'Land', 'Apartment', 'Villa', 'Pilot', 'Basement')
         .optional()
         .messages({
             'string.base': 'نوع ملک باید یک رشته متن باشد!',
@@ -479,7 +479,7 @@ export const validateID = joi.object({
 
 export const houseOrderValidator = joi.object({
     type: joi.string()
-        .valid('Eco', 'Land', 'Apartment', 'Vila', 'Pilot', 'Basement')
+        .valid('Eco', 'Land', 'Apartment', 'Villa', 'Pilot', 'Basement')
         .optional()
         .messages({
             'string.base': 'نوع ملک باید یک رشته متن باشد!',
