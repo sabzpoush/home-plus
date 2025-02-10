@@ -8,11 +8,13 @@ import fs from 'fs';
 import path from 'path';
 import { ErrorValidation } from '../../utils/helper/error.handler';
 import { validateID } from '../../utils/validator/house.validator';
+import {userValidator as userValidate} from '../../utils/validator/user.validator';
 
 
 export const userResolver = {
     login:async(_,args)=>{
         try{
+            await ErrorValidation(userValidate,args);
             const {email,password} = args;
             const user = await prisma.user.findUnique({where:{email}});
             if(!user){
@@ -31,6 +33,7 @@ export const userResolver = {
     },
     register:async(_,args)=>{
         try{
+            await ErrorValidation(userValidate,args);
             const {email}  = args;
             const token:string = createToken(email) as string;
             const hashedPassword = hashPassword(args.password);
