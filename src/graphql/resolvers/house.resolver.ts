@@ -7,7 +7,7 @@ import {ErrorValidation} from '../../utils/helper/error.handler';
 
 export const houseMutation = {
     submitHouse:async(_,{house:args},context)=>{
-       try{
+    //    try{
             const user:User = await userValidator(context.req);
             await ErrorValidation(houseSubmitValidator,args);
             const house = await prisma.house.create({data:{userId:user.id,...args}});
@@ -16,12 +16,12 @@ export const houseMutation = {
             }
     
             return house;
-        }catch(err){
-            throw new Error(err);
-        }
+        // }catch(err){
+        //     throw new Error(err);
+        // }
     },
     editHouse:async(_,{houseId,house:args},context)=>{
-        try{
+        // try{
             const user:User = await userValidator(context.req);
             await ErrorValidation(houseEditValidator,{houseId,...args});
             const house = await prisma.house.update({
@@ -37,12 +37,12 @@ export const houseMutation = {
             }
     
             return updatedHouse;
-        }catch(err){
-            throw new Error('ثبت تغییرات ملک با مشکل مواجه شد!');
-        }
+    //     }catch(err){
+    //         throw new Error('ثبت تغییرات ملک با مشکل مواجه شد!');
+    //     }
     },
     filterHouseByParameters:async(_,{filter},context)=>{
-        try{
+        // try{
             const user:User = await userTokenValidator(context.req);
             const filterValidatedValue = await ErrorValidation(houseFilterValidator,filter);
             const {
@@ -92,12 +92,12 @@ export const houseMutation = {
             }
     
             return house;
-        }catch(err){
-            throw new Error('یافتن ملک با خطا مواجه شد!');
-        }
+        // }catch(err){
+        //     throw new Error('یافتن ملک با خطا مواجه شد!');
+        // }
     },
     singleHouse:async(_,{houseId})=>{
-        try{
+        // try{
             await ErrorValidation(validateID,{id:houseId});
             const house = await prisma.house.findUnique({where:{id:houseId}});
             if(!house){
@@ -107,24 +107,24 @@ export const houseMutation = {
             }
     
             return house;
-        }catch(err){
-            throw new Error('بارگذاری ملک با خطا مواجه شد!');
-        }
+        // }catch(err){
+        //     throw new Error('بارگذاری ملک با خطا مواجه شد!');
+        // }
     },
     deleteHouse:async(_,{id: houseId},context)=>{
-        try{
+        // try{
             const user:User = await userValidator(context.req);
             await ErrorValidation(validateID,{id: houseId});
     
             const house = await prisma.house.delete({where:{id: houseId,userId:user.id}});
             if(!house) throw new Error('حذف ملک با خطا مواجه شد!');
             return `ملک ${house.title} با موفقیت حذف شد!`;
-        }catch(err){
-            throw new Error('خذف ملک با خطا مواجه شد!');
-        }
+        // }catch(err){
+        //     throw new Error('خذف ملک با خطا مواجه شد!');
+        // }
     },
     orderHouse:async(_,{category,type},context)=>{
-        try{
+        // try{
             await ErrorValidation(houseOrderValidator,{category,type})
             let newestHouse = (await prisma.house.findMany({
                 where:{AND:[
@@ -140,13 +140,13 @@ export const houseMutation = {
                 oldestHouse,
                 ...filter,
             };
-        }catch(err){
-            throw new Error('دسته بندی کردن ملک ها با خطا مواجه شد!');
-        }
+        // }catch(err){
+        //     throw new Error('دسته بندی کردن ملک ها با خطا مواجه شد!');
+        // }
         
     },
     searchProperty:async(_,{title},context)=>{
-        try{
+        // try{
             const user:User = await userTokenValidator(context.req);
             const house = await prisma.house.findMany({where:{...(user !== null && {userId:user.id})}});
             const regex = new RegExp(`^.*${title}.*$`);
@@ -155,9 +155,9 @@ export const houseMutation = {
             });
             
             return houses;
-        }catch(err){
-            throw new Error('یافتن ملک با خطا مواجه شد!');
-        }
+        // }catch(err){
+        //     throw new Error('یافتن ملک با خطا مواجه شد!');
+        // }
     },
 };
 
