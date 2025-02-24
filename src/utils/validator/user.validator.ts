@@ -1,12 +1,22 @@
 import joi from 'joi';
 
 export const userValidator = joi.object({
-    email:joi.string().required().message('لطفا ایمیل خود را وارد کنید!').email().message('ایمیل اشتباه است!'),
+    email: joi.string()
+        .required()
+        .email()
+        .messages({
+            'any.required': 'لطفا ایمیل خود را وارد کنید!',
+            'string.empty': 'لطفا ایمیل خود را وارد کنید!',
+            'string.email': 'ایمیل اشتباه است!'
+        }),
     password: joi.string()
         .required()
-        .message('رمز عبور خود را وارد کنید!')
         .min(8)
-        .message('رمز عبور شما نمی تواند کمتر از ۸ کاراکتر باشد!')
         .max(255)
-        .message('رمز عبور شما نمی تواند بیش از ۲۵۵ کاراکتر باشد!'),
+        .messages({
+            'any.required': 'رمز عبور خود را وارد کنید!',
+            'string.empty': 'رمز عبور خود را وارد کنید!',
+            'string.min': 'رمز عبور شما نمی تواند کمتر از ۸ کاراکتر باشد!',
+            'string.max': 'رمز عبور شما نمی تواند بیش از ۲۵۵ کاراکتر باشد!'
+        })
 });
