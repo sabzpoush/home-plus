@@ -163,14 +163,14 @@ export const houseMutation = {
 
 export const houseQuery = {
     allHouse:async()=>{
-        try{
+        // try{
             const house = await prisma.house.findMany();
             if(house.length == 0) throw new Error('ملکی در سایت ثبت نشده است!');
             
             return house;
-        }catch(err){
-            throw new Error('در بارگذاری تمام خانه ها مشکلی بوجود آمد!');
-        }
+        // }catch(err){
+        //     throw new Error('در بارگذاری تمام خانه ها مشکلی بوجود آمد!');
+        // }
     },
     topViewedHouse:async()=>{
         try{
