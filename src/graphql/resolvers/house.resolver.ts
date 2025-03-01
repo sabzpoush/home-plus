@@ -11,6 +11,7 @@ export const houseMutation = {
             const user:User = await userValidator(context.req);
             await ErrorValidation(houseSubmitValidator,args);
             const house = await prisma.house.create({data:{userId:user.id,...args}});
+            
             if(!house){
                 throw new Error("در ثبت این اگهی مشکلی رخ داد!");
             }
