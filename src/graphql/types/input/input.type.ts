@@ -74,7 +74,7 @@ export const houseInput = `#graphql
         meterage:Int
         meterageFrom:Int
         meterageTo:Int
-        category:CategoryType
+        category:[CategoryType]
         type:[PropertyType]
         room:Int 
     }

@@ -201,14 +201,14 @@ export const houseFilterValidator = joi.object({
         .messages({
             'string.base': 'عنوان باید یک رشته متن باشد!',
         }),
-    type: joi.string()
+    type: joi
         .valid('Eco', 'Land', 'Apartment', 'Villa', 'Pilot', 'Basement')
         .optional()
         .messages({
             'string.base': 'نوع ملک باید یک رشته متن باشد!',
             'any.only': 'نوع ملک باید یکی از مقادیر معتبر باشد!',
         }),
-    category: joi.string()
+    category: joi
         .valid('Asker', 'Buyer', 'Rent', 'Sale')
         .optional()
         .messages({

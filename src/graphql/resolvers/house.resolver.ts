@@ -45,7 +45,7 @@ export const houseMutation = {
     filterHouseByParameters:async(_,{filter},context)=>{
         // try{
             const user:User = await userTokenValidator(context.req);
-            const filterValidatedValue = await ErrorValidation(houseFilterValidator,filter);
+           // const filterValidatedValue = await ErrorValidation(houseFilterValidator,filter);
             const {
                 title,
                 room,
@@ -64,7 +64,7 @@ export const houseMutation = {
                     "Villa",
                     "Eco",
                 ],
-            } = filterValidatedValue as any;
+            } = filter as any;
      
             let house = await prisma.house.findMany({
                 where:{
