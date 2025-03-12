@@ -18,7 +18,7 @@ export async function userValidator(req):Promise<User>{
             }
             const {email} = jwt.decode(authHeader) as any;
 
-            const user = await prisma.user.findUnique({where:{token:authHeader}});
+            const user = await prisma.user.findUnique({where:{email}});
             if(!user){
                 throw new Error("User Not Found!");
             }
