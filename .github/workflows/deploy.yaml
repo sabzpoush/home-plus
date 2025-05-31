@@ -1,0 +1,40 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main  # or whatever branch you deploy from
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests (optional)
+        run: npm test
+
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: 185.252.31.164
+          username: root
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script: |
+            cd /home/ubuntu/myapp
+            git pull origin main
+            npm install
+            npx tsc
+            npx prisma generate
+            pm2 restart home-plus

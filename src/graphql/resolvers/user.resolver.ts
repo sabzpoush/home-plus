@@ -35,14 +35,13 @@ export const userResolver = {
         try{
             await ErrorValidation(userValidate,args);
             const {email}  = args;
-            const token:string = createToken(email) as string;
-            const hashedPassword = hashPassword(args.password);
             const checkUser = await prisma.user.findUnique({where:{email}});
             if(checkUser){
                 throw new Error('این ایمیل قبلا ثبت شده!');
             }
+            const token:string = createToken(email) as string;
+            const hashedPassword = hashPassword(args.password);
             const user = await prisma.user.create({data:{...args,password:hashedPassword,token}});
-    
             if(!user){
                 throw new Error("در ثبت نام کاربر مشکلی بوجود آمد!");
             }
