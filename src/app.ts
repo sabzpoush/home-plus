@@ -24,7 +24,7 @@ const startServer = async()=>{
 startServer();
 
 app.get('/',(req,res)=>{
-    res.status(200).json({message:'welcome!'});
+    res.status(200).json({message:'welcome to home-plus with ci/cd!'});
 });
 
 app.get('/ip', (req, res) => {
