@@ -34,6 +34,6 @@ app.get('/ip', (req, res) => {
   });
   
 
-app.listen(3000,()=>{
-    console.log('Server running on http://localhost:3000');
+app.listen(3010,'0.0.0.0',()=>{
+    console.log('Our Server running on http://localhost:3000');
 });

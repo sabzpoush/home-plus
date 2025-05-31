@@ -9,13 +9,11 @@
       "./src/utils/types/express.d.ts",
       "./src/utils/types/multer.d.ts"
     ],
-    "module": "NodeNext",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
