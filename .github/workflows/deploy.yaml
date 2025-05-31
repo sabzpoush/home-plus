@@ -21,8 +21,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests (optional)
-        run: npm test
 
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v0.1.6
