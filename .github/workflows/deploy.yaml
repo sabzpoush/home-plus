@@ -30,7 +30,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
-            cd /home/ubuntu/myapp
+            cd /deploy-project/home-plus
             git pull origin main
             npm install
             npx tsc
